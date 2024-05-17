@@ -1,6 +1,7 @@
 package by.it._310971_hrakovich.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /*
 Даны события events
@@ -23,12 +24,49 @@ public class A_VideoRegistrator {
         //events - события которые нужно зарегистрировать
         //timeWorkDuration время работы видеокамеры после старта
         List<Double> result;
-        result = new ArrayList<>();
+
+        result = new ArrayList<>();//запись моментов старта
+        Arrays.sort(events);
+
         int i=0;                              //i - это индекс события events[i]
         //Комментарии от проверочного решения сохранены для подсказки, но вы можете их удалить.
         //Подготовка к жадному поглощению массива событий
         //hint: сортировка Arrays.sort обеспечит скорость алгоритма
         //C*(n log n) + C1*n = O(n log n)
+        double begin; //старт
+        double end; //старт+1
+
+        //System.out.println(Arrays.toString(events));
+        while(i<=events.length-1){
+
+            begin = events[i];
+            end = begin + workDuration;
+            result.add(begin);
+
+                i++;
+                if (i<events.length - 1) {
+
+                    while (events[i] <= end) {
+
+                        if (i == events.length - 1) {
+                            if (events[i] > end) {
+                                result.add(events[i]);
+                                break;
+                            } else break;
+
+                        } else {
+                            i++;
+                        }
+                    }
+                }
+            if (i == events.length - 1) {
+                if (events[i] > end) {
+                    result.add(events[i]);
+                    break;
+                } else break;
+            }
+
+        }
 
         //пока есть незарегистрированные события
         //получим одно событие по левому краю
@@ -36,8 +74,6 @@ public class A_VideoRegistrator {
         //вычислим момент окончания работы видеокамеры
         //и теперь пропустим все покрываемые события
         //за время до конца работы, увеличивая индекс
-
-
 
         return result;                        //вернем итог
     }
