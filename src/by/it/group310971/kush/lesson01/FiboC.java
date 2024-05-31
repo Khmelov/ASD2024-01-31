@@ -6,8 +6,6 @@ package by.it.group310971.kush.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class FiboC {
 
@@ -28,7 +26,25 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        List<Long> o = new ArrayList<>();
+        long[] Arr = new long[10*m];
+        Arr[0] = 0L;
+        Arr[1] = 1L;
+        Arr[2] = 1L;
+        int i = 3;
+        boolean f = true;
+        while (f) {
+            Arr[i] = (Arr[i-1]+Arr[i-2]) % m;
+            if ((Arr[i-1] == Arr[0]) && (Arr[i] == Arr[1]))
+            {
+                f = false;
+            }
+            else{
+                i++;
+            }
+        }
+        return Arr[(int)(n % i)];
+    }
+ /*List<Long> o = new ArrayList<>();
         o.add(0L);
         o.add(1L);
         int i = 2;
@@ -37,8 +53,6 @@ public class FiboC {
             i++;
         }
         return o.get((int) (n % (i - 2)));
-    }
-
-
+    }*/
 }
 
