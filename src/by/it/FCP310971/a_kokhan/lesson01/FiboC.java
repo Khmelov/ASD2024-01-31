@@ -7,7 +7,6 @@ package by.it.FCP310971.a_kokhan.lesson01;
  */
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FiboC {
 

@@ -1,6 +1,7 @@
 package by.it.FCP310971.a_kokhan.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /*
 Даны интервальные события events
@@ -45,15 +46,47 @@ public class B_Sheduler {
         //в период [from, int] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
-        List<Event> result;
-        result = new ArrayList<>();
+        List<Event> result = new ArrayList<>();
+        List<Event> eventsList = new ArrayList<>(Arrays.asList(events));
         //ваше решение.
 
+        while (true) {
+            try {
+                result.add(getBest(eventsList, result.isEmpty() ? new Event(0, 0) : result.getLast()));
+            } catch (IllegalArgumentException e) {
+                return result; //вернем итог
+            }
+        }    
+    }
 
+    private Event getBest(List<Event> eventsList, Event lastEvent){
+        Event best = lastEvent;
+        int lastTime = lastEvent.stop;
+        int index = 0, bestStartTime = Integer.MAX_VALUE, bestDuration = Integer.MAX_VALUE;
+        while (index < eventsList.size()) {
+            Event current = eventsList.get(index);
+            if (current.start < lastTime) {
+                eventsList.remove(index);
+                continue;
+            }
+            if (current.start <= bestStartTime) {
+                int duration = getDuration(current);
+                if (duration < bestDuration) {
+                    bestDuration = duration;
+                    bestStartTime = current.start;
+                    best = current;
+                    eventsList.remove(index);
+                    continue;
+                }
+            }
+            index++;
+        }
+        if (best.equals(lastEvent))
+            throw new IllegalArgumentException("");
+        return best;
+    }
 
-
-
-
-        return result;          //вернем итог
+    private int getDuration(Event event){
+        return event.stop - event.start - 1;
     }
 }
