@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.FCP310971.a_kokhan.lesson01;
 
 import java.math.BigInteger;
 
@@ -27,25 +27,56 @@ public class FiboA {
         startTime = System.currentTimeMillis();
         return res;
     }
-
+    
+    //здесь простейший вариант, в котором код совпадает
+    //с математическим определением чисел Фибоначчи
+    //время O(2^n)
     private int calc(int n) {
-        //здесь простейший вариант, в котором код совпадает
-        //с математическим определением чисел Фибоначчи
-        //время O(2^n)
-        return 0;
+    	if (!isValueSuitable(n))
+    		return globalInt;
+    	int currentFibonacciNumber = 1, previousFibonacciNumber = 0, numberBuffer;
+    	while (globalInt > 0) {
+    		globalInt--;
+    		numberBuffer = currentFibonacciNumber;
+    		currentFibonacciNumber += previousFibonacciNumber;
+    		previousFibonacciNumber = numberBuffer;
+    	}
+        return currentFibonacciNumber;
     }
 
-
+    //рекурсия
+    //здесь нужно реализовать вариант без ограничения на размер числа,
+    //в котором код совпадает с математическим определением чисел Фибоначчи
+    //время O(2^n)
     BigInteger slowA(Integer n) {
-        //рекурсия
-        //здесь нужно реализовать вариант без ограничения на размер числа,
-        //в котором код совпадает с математическим определением чисел Фибоначчи
-        //время O(2^n)
-
-
-        return BigInteger.ZERO;
+    	if (!isValueSuitable(n))
+    		return BigInteger.valueOf(globalInt);
+        return getNextFibonacciNumberRecursively(BigInteger.ZERO, BigInteger.ONE, n);
+    }
+//    BigInteger slowA(Integer n) { // Это тот алгоритм, который соответствует условию задачи, но он вызывает переполнение стека, поэтому я написал другой
+//    	if (n == 1)
+//    		return BigInteger.valueOf(n);
+//        return slowA(n-2).add(slowA(n-1));
+//    }
+    
+    private int globalInt;
+    private boolean isValueSuitable(Integer value) {
+    	boolean returnValue = true;
+    	if (value < 3) {
+        	if (value < 1)
+        		throw new IllegalArgumentException("Only 1 or greater input allowed");
+        	returnValue = false;
+    	}
+    	globalInt = value - 1;
+    	return returnValue;
     }
 
-
+    private BigInteger getNextFibonacciNumberRecursively(BigInteger currentFibonacciNumber, BigInteger previousFibonacciNumber, int numberOfIterationLeft) {
+    	if (numberOfIterationLeft > 0) {
+    		numberOfIterationLeft--;
+    		currentFibonacciNumber = getNextFibonacciNumberRecursively(currentFibonacciNumber.add(previousFibonacciNumber), currentFibonacciNumber, numberOfIterationLeft);
+    	}
+    	return currentFibonacciNumber;
+    }
 }
 

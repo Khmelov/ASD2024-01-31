@@ -19,8 +19,8 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 55555;
-        int m = 1000;
+        int n = 999999;
+        int m = 321;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
@@ -36,6 +36,7 @@ public class FiboC {
             o.add((o.get(i - 2) + o.get(i - 1)) % m);
             i++;
         }
+        System.out.println(o.toString());
         return o.get((int) (n % (i - 2)));
     }
 
