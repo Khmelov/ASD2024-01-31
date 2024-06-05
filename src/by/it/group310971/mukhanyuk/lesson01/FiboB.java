@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.group310971.mukhanyuk.lesson01;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -28,14 +28,12 @@ public class FiboB {
         ArrayList<BigInteger> nums = new ArrayList<>(n);
         nums.add(BigInteger.ZERO);
         nums.add(BigInteger.ONE);
-        int i = 2;
-        while (i <= n){
-            BigInteger f = nums.get(i - 2).add(nums.get(i - 1));
+        for (int i = 2; i <= n; i++) {
+            BigInteger f = nums.get(i - 1).add(nums.get(i - 2));
             nums.add(f);
-            i++;
         }
-        //здесь нужно реализовать вариант с временем O(n) и памятью O(n)
         return nums.get(n);
+
     }
 
 }
