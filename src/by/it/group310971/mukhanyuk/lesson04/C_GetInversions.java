@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson04;
+package by.it.group310971.mukhanyuk.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -46,25 +46,62 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
+        int result = countInversions(a, 0, a.length - 1);
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
+    private static int mergeAndCount(int[] arr, int left, int mid, int right) {
+        int[] leftArr = new int[mid - left + 1];
+        int[] rightArr = new int[right - mid];
+
+        for (int i = 0; i < leftArr.length; i++) {
+            leftArr[i] = arr[left + i];
+        }
+
+        for (int i = 0; i < rightArr.length; i++) {
+            rightArr[i] = arr[mid + 1 + i];
+        }
+
+        int inversions = 0;
+        int i = 0, j = 0, k = left;
+
+        while (i < leftArr.length && j < rightArr.length) {
+            if (leftArr[i] <= rightArr[j]) {
+                arr[k++] = leftArr[i++];
+            } else {
+                arr[k++] = rightArr[j++];
+                inversions += (mid - left + 1 - i);
+            }
+        }
+
+        while (i < leftArr.length) {
+            arr[k++] = leftArr[i++];
+        }
+
+        while (j < rightArr.length) {
+            arr[k++] = rightArr[j++];
+        }
+
+        return inversions;
+    }
+
+    private static int countInversions(int[] arr, int left, int right) {
+        int inversions = 0;
+        if (left < right) {
+            int mid = (left + right) / 2;
+            inversions += countInversions(arr, left, mid);
+            inversions += countInversions(arr, mid + 1, right);
+            inversions += mergeAndCount(arr, left, mid, right);
+        }
+        return inversions;
+    }
+    //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/mukhanyuk/lesson04/dataC.txt");
         C_GetInversions instance = new C_GetInversions();
         //long startTime = System.currentTimeMillis();
         int result = instance.calc(stream);
