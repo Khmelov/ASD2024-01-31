@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson05;
+package by.it.group310971.mukhanyuk.lesson05;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,11 +31,18 @@ public class B_CountSort {
             points[i]=scanner.nextInt();
         }
         //тут реализуйте логику задачи с применением сортировки подсчетом
-
-
-
-
-
+        int range = 10; // диапазон значений от 1 до 10
+        int[] count = new int[range + 1];
+                for (int i = 0; i < n; i++) {
+            count[points[i]]++;         // подсчет количества каждого числа
+        }
+        int index = 0;
+        for (int i = 1; i <= range; i++) {
+            while (count[i] > 0) {
+                points[index++] = i;        // восстановление отсортированного массива
+                count[i]--;
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return points;
     }
@@ -43,7 +50,7 @@ public class B_CountSort {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson05/dataB.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/mukhanyuk/lesson05/dataB.txt");
         B_CountSort instance = new B_CountSort();
         int[] result=instance.countSort(stream);
         for (int index:result){
