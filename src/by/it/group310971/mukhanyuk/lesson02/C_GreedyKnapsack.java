@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson02;
+package by.it.group310971.mukhanyuk.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -15,15 +15,18 @@ package by.it.a_khmelev.lesson02;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
         int cost;
         int weight;
+        double valuePerWeight;
 
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
+            this.valuePerWeight = (double) cost / weight;
         }
 
         @Override
@@ -31,19 +34,18 @@ public class C_GreedyKnapsack {
             return "Item{" +
                     "cost=" + cost +
                     ", weight=" + weight +
+                    ", valuePerWeight=" + valuePerWeight +
                     '}';
         }
 
         @Override
         public int compareTo(Item o) {
             //тут может быть ваш компаратор
-
-
-            return 0;
+            return Double.compare(o.valuePerWeight, this.valuePerWeight);
         }
     }
 
-    double calc(File source) throws FileNotFoundException {
+    protected double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
         int W = input.nextInt();      //какой вес у рюкзака
@@ -60,27 +62,41 @@ public class C_GreedyKnapsack {
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
-        double result = 0;
+
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
+        Arrays.sort(items);
 
-
-
-
+        double result = 0;
+        int currentWeight = 0;
+        for (Item item : items) {
+            if (currentWeight + item.weight <= W) {
+                // Берем целый предмет
+                result += item.cost;
+                currentWeight += item.weight;
+            } else {
+                // Берем часть предмета
+                int remainingWeight = W - currentWeight;
+                result += item.valuePerWeight * remainingWeight;
+                break;
+            }
+        }
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
+
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         long startTime = System.currentTimeMillis();
         String root=System.getProperty("user.dir")+"/src/";
-        File f=new File(root+"by/it/a_khmelev/lesson02/greedyKnapsack.txt");
+        File f=new File(root+"by.it/group310971.mukhanyuk/lesson02/greedyKnapsack.txt");
         double costFinal=new C_GreedyKnapsack().calc(f);
         long finishTime = System.currentTimeMillis();
         System.out.printf("Общая стоимость %f (время %d)",costFinal,finishTime - startTime);
+
     }
 }
