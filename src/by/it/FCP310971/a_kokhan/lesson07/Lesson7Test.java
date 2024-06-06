@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson07;
+package by.it.FCP310971.a_kokhan.lesson07;
 
 import org.junit.Test;
 
