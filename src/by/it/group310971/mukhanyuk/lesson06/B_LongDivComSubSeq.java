@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson06;
+package by.it.group310971.mukhanyuk.lesson06;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,39 +6,32 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 /*
-Задача на программирование: наибольшая невозростающая подпоследовательность
+Задача на программирование: наибольшая кратная подпоследовательность
 
 Дано:
-    целое число 1<=n<=1E5 ( ОБРАТИТЕ ВНИМАНИЕ НА РАЗМЕРНОСТЬ! )
+    целое число 1≤n≤1000
     массив A[1…n] натуральных чисел, не превосходящих 2E9.
 
 Необходимо:
     Выведите максимальное 1<=k<=n, для которого гарантированно найдётся
     подпоследовательность индексов i[1]<i[2]<…<i[k] <= длины k,
-    для которой каждый элемент A[i[k]] не больше любого предыдущего
-    т.е. для всех 1<=j<k, A[i[j]]>=A[i[j+1]].
-
-    В первой строке выведите её длину k,
-    во второй - её индексы i[1]<i[2]<…<i[k]
-    соблюдая A[i[1]]>=A[i[2]]>= ... >=A[i[n]].
-
-    (индекс начинается с 1)
+    для которой каждый элемент A[i[k]] делится на предыдущий
+    т.е. для всех 1<=j<k, A[i[j+1]] делится на A[i[j]].
 
 Решить задачу МЕТОДАМИ ДИНАМИЧЕСКОГО ПРОГРАММИРОВАНИЯ
 
     Sample Input:
-    5
-    5 3 4 4 2
+    4
+    3 6 7 12
 
     Sample Output:
-    4
-    1 3 4 5
+    3
 */
 
+public class B_LongDivComSubSeq {
 
-public class C_LongNotUpSubSeq {
 
-    int getNotUpSeqSize(InputStream stream) throws FileNotFoundException {
+    int getDivSeqSize(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -50,9 +43,20 @@ public class C_LongNotUpSubSeq {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1; // Инициализируем все значения dp как 1
+        }
 
-
+        int result = 1;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (m[i] % m[j] == 0) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            result = Math.max(result, dp[i]);
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
@@ -60,9 +64,9 @@ public class C_LongNotUpSubSeq {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson06/dataC.txt");
-        C_LongNotUpSubSeq instance = new C_LongNotUpSubSeq();
-        int result = instance.getNotUpSeqSize(stream);
+        InputStream stream = new FileInputStream(root + "by/it/group310971/mukhanyuk/lesson06/dataB.txt");
+        B_LongDivComSubSeq instance = new B_LongDivComSubSeq();
+        int result = instance.getDivSeqSize(stream);
         System.out.print(result);
     }
 

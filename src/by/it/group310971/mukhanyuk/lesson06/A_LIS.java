@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson06;
+package by.it.group310971.mukhanyuk.lesson06;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,15 +44,32 @@ public class A_LIS {
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
+        int[] dp = new int[n]; // Массив DP для хранения длины
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;              // Инициализируем все значения dp как 1
+        }
+        // Заполняем массив
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (m[i] > m[j] && dp[i] < dp[j] + 1) {
+                    dp[i] = dp[j] + 1;
+                }
+            }
+        }
+        // Находим максимальное значение в массиве
         int result = 0;
+        for (int i = 0; i < n; i++) {
+            if (result < dp[i]) {
+                result = dp[i];
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
-
-
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson06/dataA.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/mukhanyuk/lesson06/dataA.txt");
         A_LIS instance = new A_LIS();
         int result = instance.getSeqSize(stream);
         System.out.print(result);
