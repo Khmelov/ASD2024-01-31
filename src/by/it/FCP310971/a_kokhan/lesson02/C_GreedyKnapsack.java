@@ -56,9 +56,8 @@ public class C_GreedyKnapsack {
             var currentItem = new Item(input.nextInt(), input.nextInt());
 
             for (var element : efficiencyList){
-                if (element.compareTo(currentItem) < 0) {
+                if (element.compareTo(currentItem) < 0)
                     break;
-                }
                 bufferInt++;
             }
             efficiencyList.add(bufferInt, currentItem);
@@ -70,12 +69,10 @@ public class C_GreedyKnapsack {
             leftWeight -= currentItem.weight;
             if (leftWeight < 0){
                 result += currentItem.efficientCost*(currentItem.weight + leftWeight);
-                System.out.println(result + " " + leftWeight);
                 break;
             }
             result += currentItem.cost;
             efficiencyList.removeFirst();
-            System.out.println(result + " " + leftWeight);
         }
         input.close();
         return result;

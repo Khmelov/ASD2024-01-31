@@ -1,8 +1,9 @@
-package by.it.a_khmelev.lesson05;
+package by.it.FCP310971.a_kokhan.lesson05;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -38,11 +39,16 @@ import java.util.Scanner;
 public class A_QSort {
 
     //отрезок
-    private class Segment  implements Comparable<Segment>{
+    private class Segment implements Comparable<Segment>{
         int start;
         int stop;
 
         Segment(int start, int stop){
+            if (start > stop) {
+                this.start = stop;
+                this.stop = start;
+                return;
+            }
             this.start = start;
             this.stop = stop;
             //тут вообще-то лучше доделать конструктор на случай если
@@ -52,8 +58,10 @@ public class A_QSort {
         @Override
         public int compareTo(Segment o) {
             //подумайте, что должен возвращать компаратор отрезков
-
-            return 0;
+            int difference = this.start-o.start;
+            if (difference == 0)
+                difference = this.stop-o.stop;
+            return difference;
         }
     }
 
@@ -63,27 +71,37 @@ public class A_QSort {
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //число отрезков отсортированного массива
-        int n = scanner.nextInt();
-        Segment[] segments=new Segment[n];
+        int recordsNumber = scanner.nextInt();
         //число точек
-        int m = scanner.nextInt();
-        int[] points=new int[m];
-        int[] result=new int[m];
+        int eventsNumber = scanner.nextInt();
+        int[] events = new int[eventsNumber];
+        int[] result = new int[eventsNumber];
 
         //читаем сами отрезки
-        for (int i = 0; i < n; i++) {
-            //читаем начало и конец каждого отрезка
-            segments[i]=new Segment(scanner.nextInt(),scanner.nextInt());
+        int bufferInt;
+        ArrayList<Segment> segmentList = new ArrayList<>();
+        for (int i = 0; i < recordsNumber; i++) {
+            bufferInt = 0;
+            var currentItem = new Segment(scanner.nextInt(),scanner.nextInt());
+
+            for (var element : segmentList){
+                if (element.compareTo(currentItem) > 0)
+                    break;
+                bufferInt++;
+            }
+            segmentList.add(bufferInt, currentItem);
         }
         //читаем точки
-        for (int i = 0; i < m; i++) {
-            points[i]=scanner.nextInt();
+        for (int i = 0; i < eventsNumber; i++) {
+            events[i] = scanner.nextInt();
         }
+        scanner.close();
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-
-
-
+        for (int i = 0; i < events.length; i++)
+            for (Segment segment : segmentList)
+                if (events[i] >= segment.start && events[i] <= segment.stop)
+                    result[i]++;
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
