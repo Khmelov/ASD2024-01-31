@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson08;
+package by.it.FCP310971.a_kokhan.lesson08;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,21 +34,39 @@ Sample Output 3:
 
 public class C_Stairs {
 
-    int getMaxSum(InputStream stream ) {
+    private int index;
+    private int maxIndex;
+
+    int getMaxSum(InputStream stream) {
         Scanner scanner = new Scanner(stream);
-        int n=scanner.nextInt();
-        int stairs[]=new int[n];
-        for (int i = 0; i < n; i++) {
+        int stairsNumber = scanner.nextInt();
+        maxIndex = stairsNumber-1;
+        int stairs[] = new int[stairsNumber];
+        for (int i = 0; i < stairsNumber; i++) {
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         int result = 0;
 
+        index = 0;
+        while (index < stairsNumber) {
+            if (stairs[safeIndex()] < 0) {
+                index++;
+                if (stairs[safeIndex()] < 0 && stairs[index-1] < stairs[safeIndex()])
+                    index++;
+            }
+            result += stairs[safeIndex()];
+            index++;
+        }
 
 
-
+        scanner.close();
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
+    }
+
+    private int safeIndex(){
+        return index > maxIndex ? maxIndex : index;
     }
 
 
