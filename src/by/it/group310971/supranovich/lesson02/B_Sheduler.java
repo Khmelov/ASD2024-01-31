@@ -1,6 +1,8 @@
-package by.it.a_khmelev.lesson02;
+package by.it.group310971.supranovich.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 /*
 Даны интервальные события events
@@ -40,20 +42,22 @@ public class B_Sheduler {
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
 
-    List<Event> calcStartTimes(Event[] events, int from, int to) {
+    protected List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
         //в период [from, int] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
-        List<Event> result;
-        result = new ArrayList<>();
-        //ваше решение.
+        List<Event> result = new ArrayList<>();
+        Arrays.sort(events, Comparator.comparingInt(e -> e.stop));
 
+        int lastEndTime = from;
 
-
-
-
-
-        return result;          //вернем итог
+        for (Event event : events) {
+            if (event.start >= lastEndTime && event.stop <= to) {
+                result.add(event);
+                lastEndTime = event.stop;
+            }
+        }
+        return result;
     }
 }
