@@ -14,16 +14,19 @@ package by.it.FCP310971.a_kokhan.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
         int cost;
         int weight;
+        int efficientCost;
 
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
+            efficientCost = cost/weight;
         }
 
         @Override
@@ -37,41 +40,44 @@ public class C_GreedyKnapsack {
         @Override
         public int compareTo(Item o) {
             //тут может быть ваш компаратор
-
-
-            return 0;
+            return this.efficientCost-o.efficientCost;
         }
     }
 
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
-        int n = input.nextInt();      //сколько предметов в файле
-        int W = input.nextInt();      //какой вес у рюкзака
-        Item[] items = new Item[n];   //получим список предметов
-        for (int i = 0; i < n; i++) { //создавая каждый конструктором
-            items[i] = new Item(input.nextInt(), input.nextInt());
-        }
-        //покажем предметы
-        for (Item item:items) {
-            System.out.println(item);
-        }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
+        int itemNumber = input.nextInt();      //сколько предметов в файле
+        int leftWeight = input.nextInt();      //какой вес у рюкзака
+        int bufferInt;
+        ArrayList<Item> efficiencyList = new ArrayList<>(itemNumber);
 
-        //тут необходимо реализовать решение задачи
-        //итогом является максимально воможная стоимость вещей в рюкзаке
-        //вещи можно резать на кусочки (непрерывный рюкзак)
+        for (int i = 0; i < itemNumber; i++) { //создавая каждый конструктором
+            bufferInt = 0;
+            var currentItem = new Item(input.nextInt(), input.nextInt());
+
+            for (var element : efficiencyList){
+                if (element.compareTo(currentItem) < 0) {
+                    break;
+                }
+                bufferInt++;
+            }
+            efficiencyList.add(bufferInt, currentItem);
+        }
+
         double result = 0;
-        //тут реализуйте алгоритм сбора рюкзака
-        //будет особенно хорошо, если с собственной сортировкой
-        //кроме того, можете описать свой компаратор в классе Item
-
-        //ваше решение.
-
-
-
-
-
-        System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
+        while (leftWeight > 0) {
+            var currentItem = efficiencyList.getFirst();
+            leftWeight -= currentItem.weight;
+            if (leftWeight < 0){
+                result += currentItem.efficientCost*(currentItem.weight + leftWeight);
+                System.out.println(result + " " + leftWeight);
+                break;
+            }
+            result += currentItem.cost;
+            efficiencyList.removeFirst();
+            System.out.println(result + " " + leftWeight);
+        }
+        input.close();
         return result;
     }
 
