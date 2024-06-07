@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson06;
+package by.it.group310971.supranovich.lesson06;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,9 +50,39 @@ public class C_LongNotUpSubSeq {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
-
-
+        int[] dp = new int[n];
+        int[] prev = new int[n];
+        dp[0] = 1;
+        prev[0] = -1;
+        int result = 1;
+        int lastIndex = 0;
+        for (int i = 1; i < n; i++) {
+            dp[i] = 1;
+            prev[i] = -1;
+            for (int j = 0; j < i; j++) {
+                if (m[j] >= m[i] && dp[j] + 1 > dp[i]) {
+                    dp[i] = dp[j] + 1;
+                    prev[i] = j;
+                }
+            }
+            if (dp[i] > result) {
+                result = dp[i];
+                lastIndex = i;
+            }
+        }
+        // восстанавливаем последовательность
+        int[] seq = new int[result];
+        int index = lastIndex;
+        int pos = result - 1;
+        while (index != -1) {
+            seq[pos] = index + 1; // индексы начинаются с 1
+            pos--;
+            index = prev[index];
+        }
+        System.out.println(result);
+        for (int i = 0; i < result; i++) {
+            System.out.print(seq[i] + " ");
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
@@ -60,7 +90,7 @@ public class C_LongNotUpSubSeq {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson06/dataC.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/supranovich/lesson06/dataC.txt");
         C_LongNotUpSubSeq instance = new C_LongNotUpSubSeq();
         int result = instance.getNotUpSeqSize(stream);
         System.out.print(result);
