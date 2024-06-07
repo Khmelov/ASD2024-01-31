@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson04;
+package by.it.group310971.supranovich.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,7 +37,7 @@ public class B_MergeSort {
 
         // тут ваше решение (реализуйте сортировку слиянием)
         // https://ru.wikipedia.org/wiki/Сортировка_слиянием
-
+        mergeSort(a, 0, n - 1);
 
 
 
@@ -46,9 +46,55 @@ public class B_MergeSort {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return a;
     }
+    private void mergeSort(int[] a, int left, int right) {
+        if (left < right) {
+            int middle = (left + right) / 2;
+            mergeSort(a, left, middle);
+            mergeSort(a, middle + 1, right);
+            merge(a, left, middle, right);
+        }
+    }
+
+    private void merge(int[] a, int left, int middle, int right) {
+        int[] leftArray = new int[middle - left + 1];
+        int[] rightArray = new int[right - middle];
+
+
+        for (int i = 0; i < leftArray.length; i++) {
+            leftArray[i] = a[left + i];
+        }
+        for (int i = 0; i < rightArray.length; i++) {
+            rightArray[i] = a[middle + 1 + i];
+        }
+
+
+        int i = 0, j = 0, k = left;
+        while (i < leftArray.length && j < rightArray.length) {
+            if (leftArray[i] <= rightArray[j]) {
+                a[k] = leftArray[i];
+                i++;
+            } else {
+                a[k] = rightArray[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < leftArray.length) {
+            a[k] = leftArray[i];
+            i++;
+            k++;
+        }
+        while (j < rightArray.length) {
+            a[k] = rightArray[j];
+            j++;
+            k++;
+        }
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataB.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/supranovich/lesson04/dataB.txt");
         B_MergeSort instance = new B_MergeSort();
         //long startTime = System.currentTimeMillis();
         int[] result=instance.getMergeSort(stream);
