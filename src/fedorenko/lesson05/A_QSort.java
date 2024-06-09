@@ -3,8 +3,7 @@ package fedorenko.lesson05;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Scanner;
-
+import java.util.*;
 /*
 Видеорегистраторы и площадь.
 На площади установлена одна или несколько камер.
@@ -82,7 +81,27 @@ public class A_QSort {
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
 
+        // Сортируем отрезки по началу
+        Arrays.sort(segments, Comparator.comparingInt(a -> a.start));
 
+        // Для каждой точки находим количество отрезков, которым она принадлежит
+        for (int i = 0; i < m; i++) {
+            int count = 0;
+            for (Segment segment : segments) {
+                if (segment.start > points[i]) {
+                    break;
+                }
+                if (points[i] >= segment.start && points[i] <= segment.stop) {
+                    count++;
+                }
+            }
+            result[i] = count;
+        }
+
+        // Выводим результат
+        for (int index : result) {
+            System.out.print(index + " ");
+        }
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -92,7 +111,7 @@ public class A_QSort {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson05/dataA.txt");
+        InputStream stream = new FileInputStream(root + "fedorenko/lesson05/dataA.txt");
         A_QSort instance = new A_QSort();
         int[] result=instance.getAccessory(stream);
         for (int index:result){
