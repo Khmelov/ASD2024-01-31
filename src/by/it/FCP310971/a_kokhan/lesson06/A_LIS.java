@@ -38,13 +38,25 @@ public class A_LIS {
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //общая длина последовательности
-        int n = scanner.nextInt();
-        int[] m = new int[n];
+        int inputNumber = scanner.nextInt();
+        int[] numbers = new int[inputNumber];
+
         //читаем всю последовательность
-        for (int i = 0; i < n; i++) {
-            m[i] = scanner.nextInt();
-        }
+        for (int i = 0; i < inputNumber; i++)
+            numbers[i] = scanner.nextInt();
+        scanner.close();
+
         int result = 0;
+
+        for (int i = 0; i < inputNumber; i++) {
+            if (i != inputNumber-1)
+                if (numbers[i] >= numbers[i + 1]) 
+                    continue;
+                else
+                    result++;
+            else if (numbers[i-1] < numbers[inputNumber-1]) 
+                result++;
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

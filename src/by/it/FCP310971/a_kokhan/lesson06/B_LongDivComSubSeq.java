@@ -36,15 +36,25 @@ public class B_LongDivComSubSeq {
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //общая длина последовательности
-        int n = scanner.nextInt();
-        int[] m = new int[n];
+        int inputNumber = scanner.nextInt();
+        int[] numbers = new int[inputNumber];
         //читаем всю последовательность
-        for (int i = 0; i < n; i++) {
-            m[i] = scanner.nextInt();
-        }
+        for (int i = 0; i < inputNumber; i++)
+            numbers[i] = scanner.nextInt();
+        scanner.close();
         //тут реализуйте логику задачи методами динамического программирования (!!!)
+
+        int[] sequence = new int[inputNumber];
         int result = 0;
 
+        sequence[0] = 1;
+        for (int i = 1; i < inputNumber; i++){
+            sequence[i] = 1;
+            for (int j = 0; j < i; j++)
+                if (numbers[i] % numbers[j] == 0)
+                    sequence[i] = Math.max(sequence[i], sequence[j] + 1);
+            result = Math.max(result, sequence[i]);
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
