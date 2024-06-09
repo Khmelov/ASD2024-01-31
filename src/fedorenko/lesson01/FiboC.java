@@ -8,7 +8,6 @@ package fedorenko.lesson01;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class FiboC {
 
     private long startTime = System.currentTimeMillis();
