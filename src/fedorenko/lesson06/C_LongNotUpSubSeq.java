@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
-
+import java.util.Arrays;
 /*
 Задача на программирование: наибольшая невозростающая подпоследовательность
 
@@ -50,17 +50,44 @@ public class C_LongNotUpSubSeq {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
+        // массив для хранения длин наибольших невозрастающих подпоследовательностей
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1); // инициализируем все значения как 1, так как минимальная длина подпоследовательности - 1
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (m[j] >= m[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        // находим максимальное значение в массиве dp
+        int maxSeqLength = 0;
+        for (int i = 0; i < n; i++) {
+            maxSeqLength = Math.max(maxSeqLength, dp[i]);
+        }
+
+        // находим саму подпоследовательность
+        int[] resultIndexes = new int[maxSeqLength];
+        int lastIndex = Integer.MAX_VALUE;
+        for (int i = n - 1; i >= 0; i--) {
+            if (dp[i] == maxSeqLength && m[i] <= lastIndex) {
+                resultIndexes[--maxSeqLength] = i + 1; // сохраняем индексы (индексация начинается с 1)
+                lastIndex = m[i];
+            }
+        }
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        System.out.println(Arrays.toString(resultIndexes));
+        return resultIndexes.length;
     }
 
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson06/dataC.txt");
+        InputStream stream = new FileInputStream(root + "fedorenko/lesson06/dataC.txt");
         C_LongNotUpSubSeq instance = new C_LongNotUpSubSeq();
         int result = instance.getNotUpSeqSize(stream);
         System.out.print(result);
