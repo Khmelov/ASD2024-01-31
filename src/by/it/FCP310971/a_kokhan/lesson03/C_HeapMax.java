@@ -75,14 +75,10 @@ public class C_HeapMax {
             int right = siftUp(i);
             int largest = i;
     
-            if (left < heap.size() && heap.get(left) > heap.get(largest)) {
+            if (left < heap.size() && heap.get(left) > heap.get(largest))
                 largest = left;
-            }
-    
-            if (right < heap.size() && heap.get(right) > heap.get(largest)) {
+            if (right < heap.size() && heap.get(right) > heap.get(largest))
                 largest = right;
-            }
-    
             if (largest != i) {
                 swap(i, largest);
                 heapify(largest);

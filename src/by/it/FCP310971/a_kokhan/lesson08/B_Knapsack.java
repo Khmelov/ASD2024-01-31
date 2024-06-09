@@ -3,6 +3,8 @@ package by.it.FCP310971.a_kokhan.lesson08;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /*
@@ -31,17 +33,24 @@ public class B_Knapsack {
     int getMaxWeight(InputStream stream ) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
-        int w=scanner.nextInt();
-        int n=scanner.nextInt();
-        int gold[]=new int[n];
-        for (int i = 0; i < n; i++) {
+        int maxCapacity = scanner.nextInt();
+        int barNumber = scanner.nextInt();
+
+        int gold[] = new int[barNumber];
+        for (int i = 0; i < barNumber; i++)
             gold[i]=scanner.nextInt();
-        }
+        scanner.close();
 
-
-        int result = 0;
+        int[][] combinationMatrix = new int[gold.length + 1][maxCapacity + 1];
+    
+        for (int i = 1; i <= gold.length; i++)
+            for (int j = 1; j <= maxCapacity; j++)
+                if (j >= gold[i - 1])
+                    combinationMatrix[i][j] = Math.max(combinationMatrix[i - 1][j], combinationMatrix[i - 1][j - gold[i - 1]] + gold[i - 1]);
+                else
+                    combinationMatrix[i][j] = combinationMatrix[i - 1][j];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return combinationMatrix[gold.length][maxCapacity];
     }
 
 
