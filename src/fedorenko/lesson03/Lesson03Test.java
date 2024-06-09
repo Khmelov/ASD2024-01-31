@@ -18,7 +18,6 @@ public class Lesson03Test {
     Search for test:    In whole project
     */
 
-
     @Test
     public void A() throws Exception {
         String root = System.getProperty("user.dir") + "/src/";
