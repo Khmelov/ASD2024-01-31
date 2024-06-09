@@ -33,25 +33,36 @@ public class A_BinaryFind {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
         //размер отсортированного массива
-        int n = scanner.nextInt();
+        int sortedArraySize = scanner.nextInt();
+
         //сам отсортированный массива
-        int[] a=new int[n];
-        for (int i = 1; i <= n; i++) {
-            a[i-1] = scanner.nextInt();
-        }
+        int[] array = new int[sortedArraySize];
+        for (int i = 1; i <= sortedArraySize; i++)
+            array[i - 1] = scanner.nextInt();
 
         //размер массива индексов
-        int k = scanner.nextInt();
-        int[] result=new int[k];
-        for (int i = 0; i < k; i++) {
-            int value = scanner.nextInt();
+        int indexArraySize = scanner.nextInt(), value, left, right, mid;
+        int[] result = new int[indexArraySize];
+        for (int i = 0; i < indexArraySize; i++) {
+            value = scanner.nextInt();
             //тут реализуйте бинарный поиск индекса
 
+            left = 0;
+            right = sortedArraySize - 1;
+            result[i] = -1;
 
-
-
-            result[i]=0;
+            while (left <= right) {
+                mid = left + (right - left) / 2;
+                if (array[mid] == value) {
+                    result[i] = mid;
+                    break;
+                } else if (array[mid] < value)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
+            }
         }
+        scanner.close();
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
@@ -64,9 +75,8 @@ public class A_BinaryFind {
         //long startTime = System.currentTimeMillis();
         int[] result=instance.findIndex(stream);
         //long finishTime = System.currentTimeMillis();
-        for (int index:result){
+        for (int index:result)
             System.out.print(index+" ");
-        }
     }
 
 }

@@ -27,25 +27,45 @@ public class B_MergeSort {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
         //размер массива
-        int n = scanner.nextInt();
+        int entryNumber = scanner.nextInt();
         //сам массив
-        int[] a=new int[n];
-        for (int i = 0; i < n; i++) {
-            a[i] = scanner.nextInt();
-            System.out.println(a[i]);
-        }
+        int[] array = new int[entryNumber];
+        for (int i = 0; i < entryNumber; i++)
+            array[i] = scanner.nextInt();
+        scanner.close();
 
         // тут ваше решение (реализуйте сортировку слиянием)
         // https://ru.wikipedia.org/wiki/Сортировка_слиянием
 
+        int mid, right, leftBuffer, middleBuffer, index;
+        int[] temp;
 
-
-
-
-
+        for (int subSize = 1; subSize < entryNumber; subSize *= 2)
+            for (int left = 0; left < entryNumber - subSize; left += 2 * subSize) {
+                mid = left + subSize;
+                right = Math.min(left + 2 * subSize, entryNumber);
+                leftBuffer = left;
+                middleBuffer = mid;
+                temp = new int[right - left];
+                index = 0;
+            
+                while (leftBuffer < mid && middleBuffer < right)
+                    if (array[leftBuffer] <= array[middleBuffer])
+                        temp[index++] = array[leftBuffer++];
+                    else
+                        temp[index++] = array[middleBuffer++];
+                while (leftBuffer < mid)
+                    temp[index++] = array[leftBuffer++];
+                while (middleBuffer < right)
+                    temp[index++] = array[middleBuffer++];
+            
+                for (leftBuffer = left; leftBuffer < right; leftBuffer++)
+                    array[leftBuffer] = temp[leftBuffer - left];
+            }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return a;
+        return array;
     }
+
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataB.txt");
@@ -53,9 +73,8 @@ public class B_MergeSort {
         //long startTime = System.currentTimeMillis();
         int[] result=instance.getMergeSort(stream);
         //long finishTime = System.currentTimeMillis();
-        for (int index:result){
+        for (int index:result)
             System.out.print(index+" ");
-        }
     }
 
 
