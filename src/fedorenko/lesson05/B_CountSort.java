@@ -31,10 +31,18 @@ public class B_CountSort {
             points[i]=scanner.nextInt();
         }
         //тут реализуйте логику задачи с применением сортировки подсчетом
+        int[] count = new int[11]; // так как числа не превышают 10
 
+        for (int i = 0; i < n; i++) {
+            count[points[i]]++;
+        }
 
-
-
+        int index = 0;
+        for (int i = 0; i < count.length; i++) {
+            for (int j = 0; j < count[i]; j++) {
+                points[index++] = i;
+            }
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return points;
@@ -43,7 +51,7 @@ public class B_CountSort {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson05/dataB.txt");
+        InputStream stream = new FileInputStream(root + "fedorenko/lesson05/dataB.txt");
         B_CountSort instance = new B_CountSort();
         int[] result=instance.countSort(stream);
         for (int index:result){
