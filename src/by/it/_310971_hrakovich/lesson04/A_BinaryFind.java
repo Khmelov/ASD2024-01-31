@@ -3,6 +3,7 @@ package by.it._310971_hrakovich.lesson04;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -34,6 +35,7 @@ public class A_BinaryFind {
 
         //размер отсортированного массива
         int n = scanner.nextInt();
+
         //сам отсортированный массива
         int[] a=new int[n];
         for (int i = 1; i <= n; i++) {
@@ -43,14 +45,41 @@ public class A_BinaryFind {
         //размер массива индексов
         int k = scanner.nextInt();
         int[] result=new int[k];
+
         for (int i = 0; i < k; i++) {
+
+            boolean flag = false;
+            int left = 0;
+            int right = n-1;
+            int middle = 0;
             int value = scanner.nextInt();
+
             //тут реализуйте бинарный поиск индекса
 
+            while((left<=right) && (flag!=true)) {
+
+                middle = (left + right) / 2;
+                if (a[middle] == value) {
+                    flag=true;
+
+                }
+                else if (a[middle] > value) {
+                    right = middle - 1;
+
+                }
+                else {
+                    left = middle + 1;
+
+                }
+            }
+            if (flag) result[i]=middle+1;
+            else result[i]=-1;
+            //}
 
 
 
-            result[i]=0;
+
+
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;

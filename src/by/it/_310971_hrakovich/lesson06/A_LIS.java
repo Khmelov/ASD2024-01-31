@@ -45,6 +45,15 @@ public class A_LIS {
             m[i] = scanner.nextInt();
         }
         int result = 0;
+        for (int i = 0; i < n; i++) {
+            if (i!=n-1) {
+                if (m[i] >= m[i + 1]) continue;
+                if (m[i] < m[i + 1]) result++;
+            }
+            if (i==n-1){
+                if (m[i-1]< m[n-1]) result++;
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

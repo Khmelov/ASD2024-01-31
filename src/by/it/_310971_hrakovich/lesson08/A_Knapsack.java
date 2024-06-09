@@ -3,6 +3,8 @@ package by.it._310971_hrakovich.lesson08;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -46,10 +48,18 @@ public class A_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
+        int[] dp = new int [w+1];
+        for (int ww = 1; ww <= w; ww++){
+            for (int weight : gold){
+                if (weight<= ww){
+                    dp[ww] = Math.max(dp[ww], dp[ww-weight] + weight);
+                }
+            }
+        }
 
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+
+        return dp[w];
     }
 
 

@@ -3,6 +3,9 @@ package by.it._310971_hrakovich.lesson03;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 //Lesson 3. A_Huffman.
 //Разработайте метод encode(File file) для кодирования строки (код Хаффмана)
@@ -85,6 +88,7 @@ public class A_Huffman {
             right.fillCodes(code + "1");
         }
 
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -104,6 +108,7 @@ public class A_Huffman {
             //и можно запомнить его в индексе для поиска кода по символу.
             codes.put(this.symbol, code);
         }
+
     }
 
     //индекс данных из листьев
@@ -119,26 +124,46 @@ public class A_Huffman {
         //все комментарии от тестового решения были оставлены т.к. это задание A.
         //если они вам мешают их можно удалить
 
-        Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        Map<Character, Integer> count = new HashMap<>();
+        for (char c : s.toCharArray()){
+            count.merge(c, 1, Integer::sum);
+        }
 
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
+        for (Map.Entry<Character, Integer> entry: count.entrySet()){
+            priorityQueue.offer(new LeafNode(entry.getValue(), entry.getKey()));
+        }
 
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
         //У родителя частоты детей складываются.
 
+        while (priorityQueue.size()>1){
+            Node left = priorityQueue.poll();
+            Node right = priorityQueue.poll();
+            priorityQueue.offer(new InternalNode(left,right));
+        }
+
         //4. последний из родителей будет корнем этого дерева
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
+
+        codes.clear();
+        priorityQueue.peek().fillCodes("");
+
         StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()){
+            sb.append(codes.get(c));
+        }
         //.....
 
         return sb.toString();
         //01001100100111
         //01001100100111
+
     }
     //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 

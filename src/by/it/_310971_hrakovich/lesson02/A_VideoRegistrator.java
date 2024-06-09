@@ -43,22 +43,22 @@ public class A_VideoRegistrator {
             end = begin + workDuration;
             result.add(begin);
 
-                i++;
-                if (i<events.length - 1) {
+            i++;
+            if (i<events.length - 1) {
 
-                    while (events[i] <= end) {
+                while (events[i] <= end) {
 
-                        if (i == events.length - 1) {
-                            if (events[i] > end) {
-                                result.add(events[i]);
-                                break;
-                            } else break;
+                    if (i == events.length - 1) {
+                        if (events[i] > end) {
+                            result.add(events[i]);
+                            break;
+                        } else break;
 
-                        } else {
-                            i++;
-                        }
+                    } else {
+                        i++;
                     }
                 }
+            }
             if (i == events.length - 1) {
                 if (events[i] > end) {
                     result.add(events[i]);
