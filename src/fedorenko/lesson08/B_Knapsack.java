@@ -31,23 +31,33 @@ public class B_Knapsack {
     int getMaxWeight(InputStream stream ) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
-        int w=scanner.nextInt();
-        int n=scanner.nextInt();
-        int gold[]=new int[n];
+        int W = scanner.nextInt();
+        int n = scanner.nextInt();
+        int gold[] = new int[n];
         for (int i = 0; i < n; i++) {
-            gold[i]=scanner.nextInt();
+            gold[i] = scanner.nextInt();
+        }
+        int[][] dp = new int[n+1][W+1];
+        // заполняем массив dp
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= W; j++) {
+                if (gold[i-1] > j) {
+                    dp[i][j] = dp[i-1][j];
+                } else {
+
+                    dp[i][j] = Math.max(dp[i-1][j], gold[i-1] + dp[i-1][j-gold[i-1]]);
+                }
+            }
         }
 
-
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return dp[n][W];  // возвращаем максимальный вес золота
     }
 
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson08/dataB.txt");
+        InputStream stream = new FileInputStream(root + "fedorenko/lesson08/dataB.txt");
         B_Knapsack instance = new B_Knapsack();
         int res=instance.getMaxWeight(stream);
         System.out.println(res);
