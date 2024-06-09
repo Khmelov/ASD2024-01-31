@@ -39,23 +39,47 @@ public class A_Knapsack {
     int getMaxWeight(InputStream stream ) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
-        int w=scanner.nextInt();
-        int n=scanner.nextInt();
-        int gold[]=new int[n];
+        int W = scanner.nextInt(); // вместимость рюкзака
+        int n = scanner.nextInt(); // количество видов золотых слитков
+        int gold[] = new int[n]; // массив для хранения весов слитков
         for (int i = 0; i < n; i++) {
-            gold[i]=scanner.nextInt();
+            gold[i] = scanner.nextInt(); // заполняем массив весами слитков
+        }
+        // массив для хранения результатов
+        int[][] dp = new int[n+1][W+1];
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= W; j++) {
+                dp[i][j] = -1;
+            }
         }
 
-
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return knapsackWithRepeat(gold, W, n, dp);  // вызываем рекурсивную функцию
+    }
+
+    int knapsackWithRepeat(int[] gold, int W, int n, int[][] dp) {
+        // если количество предметов или вместимость рюкзака равны 0, возвращаем 0
+        if (n == 0 || W == 0) {
+            return 0;
+        }
+        // если значение для данной пары (n, W) уже вычислено, возвращаем его
+        if (dp[n][W] != -1) {
+            return dp[n][W];
+        }
+        if (gold[n-1] > W) {
+            dp[n][W] = knapsackWithRepeat(gold, W, n-1, dp);
+        } else {
+            dp[n][W] = Math.max(knapsackWithRepeat(gold, W, n-1, dp),
+                    gold[n-1] + knapsackWithRepeat(gold, W-gold[n-1], n,
+                            dp));
+        }
+        return dp[n][W];
     }
 
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson08/dataA.txt");
+        InputStream stream = new FileInputStream(root + "fedorenko/lesson08/dataA.txt");
         A_Knapsack instance = new A_Knapsack();
         int res=instance.getMaxWeight(stream);
         System.out.println(res);
