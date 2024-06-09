@@ -121,6 +121,7 @@ public class A_Huffman {
             count.put(c, count.getOrDefault(c,0)+1);
         }
 
+
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
         for (char c : count.keySet()) {
@@ -138,7 +139,9 @@ public class A_Huffman {
         }
         //4. последний из родителей будет корнем этого дерева
         Node root = priorityQueue.poll();
-
+        if (root != null) {
+            root.fillCodes("");
+        }
         StringBuilder sb = new StringBuilder();
         for (char c : s.toCharArray()) {
             sb.append(codes.get(c));
