@@ -15,6 +15,8 @@ package fedorenko.lesson02;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
@@ -60,17 +62,25 @@ public class C_GreedyKnapsack {
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
-        double result = 0;
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
+        //ваше решение
 
-        //ваше решение.
-
-
-
-
-
+        // Сортируем предметы по стоимости за единицу веса в убывающем порядке
+        Arrays.sort(items, Comparator.comparingDouble((Item item) -> (double) item.cost / item.weight).reversed());
+        double result = 0;
+        int currentWeight = 0; // Текущий вес в рюкзаке
+        for (Item item : items) {
+            if (currentWeight + item.weight <= W) { // Если предмет полностью помещается в рюкзак
+                result += item.cost; // Добавляем его стоимость к итоговой стоимости
+                currentWeight += item.weight; // Увеличиваем текущий вес
+            } else { // Если предмет не помещается полностью
+                double fraction = (double) (W - currentWeight) / item.weight; // Вычисляем долю предмета, которая поместится
+                result += item.cost * fraction; // Добавляем только часть стоимости предмета
+                break; // Рюкзак заполнен, выход
+            }
+        }
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
