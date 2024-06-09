@@ -163,9 +163,9 @@ public class A_Huffman {
         String root = System.getProperty("user.dir") + "/src/";
         File f = new File(root + "by/it/a_khmelev/lesson03/dataHuffman.txt");
         A_Huffman instance = new A_Huffman();
-        long startTime = System.currentTimeMillis();
+        //long startTime = System.currentTimeMillis();
         String result = instance.encode(f);
-        long finishTime = System.currentTimeMillis();
+        //long finishTime = System.currentTimeMillis();
         System.out.printf("%d %d\n", codesMap.size(), result.length());
         for (Map.Entry<Character, String> entry : codesMap.entrySet()) {
             System.out.printf("%s: %s\n", entry.getKey(), entry.getValue());
