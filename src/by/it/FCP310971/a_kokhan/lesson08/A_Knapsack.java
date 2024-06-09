@@ -39,17 +39,21 @@ public class A_Knapsack {
     int getMaxWeight(InputStream stream ) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
-        int w=scanner.nextInt();
-        int n=scanner.nextInt();
-        int gold[]=new int[n];
-        for (int i = 0; i < n; i++) {
+        int maxCapacity = scanner.nextInt();
+        int barNumber = scanner.nextInt();
+
+        int gold[] = new int[barNumber];
+        for (int i = 0; i < barNumber; i++)
             gold[i]=scanner.nextInt();
-        }
+        scanner.close();
 
-
-        int result = 0;
+        int[] dp = new int [maxCapacity];
+        for (int i = 0; i < maxCapacity; i++)
+            for (int j = 0; j < barNumber; j++)
+                if (gold[j] <= i)
+                    dp[i] = Math.max(dp[i], dp[i - gold[j]] + gold[j]);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return dp[maxCapacity - 1];
     }
 
 
