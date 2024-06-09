@@ -42,19 +42,23 @@ public class C_Stairs {
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
 
-
-
+        // Алгоритм для нахождения максимальной суммы при подъеме по лестнице
+        int[] maxSum = new int[n + 1];
+        maxSum[0] = 0;
+        maxSum[1] = stairs[0];
+        for (int i = 2; i <= n; i++) {
+            maxSum[i] = Math.max(maxSum[i - 1], maxSum[i - 2]) + stairs[i - 1];
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return maxSum[n];
     }
 
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson08/dataC.txt");
+        InputStream stream = new FileInputStream(root + "fedorenko/lesson08/dataC.txt");
         C_Stairs instance = new C_Stairs();
         int res=instance.getMaxSum(stream);
         System.out.println(res);
