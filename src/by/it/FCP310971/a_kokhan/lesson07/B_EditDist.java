@@ -42,12 +42,30 @@ public class B_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int oneLength = one.length() + 1, twoLength = two.length() + 1, add, delete, change;
+        int[] currentRow = new int[oneLength];
+        int[] previousRow;
+        
+        for (int i = 0; i < oneLength; i++)
+            currentRow[i] = i;
 
+        for (int i = 1; i < twoLength; i++) {
+            previousRow = currentRow;
+            currentRow = new int[oneLength];
+            currentRow[0] = i;
 
+            for (int j = 1; j < oneLength; j++) {
+                add = previousRow[j] + 1;
+                delete = currentRow[j - 1] + 1;
+                change = previousRow[j - 1];
+                if (one.charAt(j - 1) != two.charAt(i - 1))
+                    change += 1;
+                currentRow[j] = Math.min(add, Math.min(delete, change));
+            }
+        }
 
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return currentRow[oneLength-1];
     }
 
 
