@@ -39,11 +39,11 @@ public class A_Knapsack {
     int getMaxWeight(InputStream stream ) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
-        int W = scanner.nextInt(); // вместимость рюкзака
-        int n = scanner.nextInt(); // количество видов золотых слитков
-        int gold[] = new int[n]; // массив для хранения весов слитков
+        int W = scanner.nextInt();
+        int n = scanner.nextInt();
+        int gold[] = new int[n];
         for (int i = 0; i < n; i++) {
-            gold[i] = scanner.nextInt(); // заполняем массив весами слитков
+            gold[i] = scanner.nextInt();
         }
         // массив для хранения результатов
         int[][] dp = new int[n+1][W+1];
