@@ -19,6 +19,7 @@ public class Lesson6Test {
     }
 
 
+
     @Test
     public void B() throws Exception {
         String root = System.getProperty("user.dir") + "/src/";

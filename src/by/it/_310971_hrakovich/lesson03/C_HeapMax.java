@@ -44,21 +44,54 @@ public class C_HeapMax {
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вверх
-
-            return i;
+            return 2 * i + 1;
         }
 
         int siftUp(int i) { //просеивание вниз
+            return 2 * i + 2;
+        }
 
-            return i;
+        private int parent(int i) {
+            return (i - 1) / 2;
+        }
+
+        private void swap(int i, int j) {
+            long temp = heap.get(i);
+            heap.set(i, heap.get(j));
+            heap.set(j, temp);
         }
 
         void insert(Long value) { //вставка
+            heap.add(value);
+            int i = heap.size() - 1;
+            while (i != 0 && heap.get(parent(i)) < heap.get(i)) {
+                swap(i, parent(i));
+                i = parent(i);
+            }
+        }
+
+        private void heapify(int i) {
+            int left = siftDown(i);
+            int right = siftUp(i);
+            int largest = i;
+
+            if (left < heap.size() && heap.get(left) > heap.get(largest))
+                largest = left;
+            if (right < heap.size() && heap.get(right) > heap.get(largest))
+                largest = right;
+            if (largest != i) {
+                swap(i, largest);
+                heapify(largest);
+            }
         }
 
         Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
-
+            if (heap.isEmpty())
+                return null;
+            Long result = heap.get(0);
+            heap.set(0, heap.get(heap.size() - 1));
+            heap.remove(heap.size() - 1);
+            heapify(0);
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -66,7 +99,7 @@ public class C_HeapMax {
 
     //эта процедура читает данные из файла, ее можно не менять.
     Long findMaxValue(InputStream stream) {
-        Long maxValue=0L;
+        Long maxValue = 0L;
         MaxHeap heap = new MaxHeap();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(stream);
@@ -74,9 +107,9 @@ public class C_HeapMax {
         for (int i = 0; i < count; ) {
             String s = scanner.nextLine();
             if (s.equalsIgnoreCase("extractMax")) {
-                Long res=heap.extractMax();
+                Long res = heap.extractMax();
                 if (res!=null && res>maxValue) maxValue=res;
-                System.out.println();
+                System.out.println(maxValue);
                 i++;
             }
             if (s.contains(" ")) {
@@ -84,9 +117,10 @@ public class C_HeapMax {
                 if (p[0].equalsIgnoreCase("insert"))
                     heap.insert(Long.parseLong(p[1]));
                 i++;
-            //System.out.println(heap); //debug
+                //System.out.println(heap); //debug
             }
         }
+        scanner.close();
         return maxValue;
     }
 

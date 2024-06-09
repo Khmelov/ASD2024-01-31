@@ -3,6 +3,8 @@ package by.it._310971_hrakovich.lesson06;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -43,18 +45,46 @@ public class C_LongNotUpSubSeq {
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //общая длина последовательности
-        int n = scanner.nextInt();
-        int[] m = new int[n];
+        int[] numbersArray = new int[scanner.nextInt()];
         //читаем всю последовательность
-        for (int i = 0; i < n; i++) {
-            m[i] = scanner.nextInt();
+        for (int i = 0; i < numbersArray.length; i++) {
+            numbersArray[i] = scanner.nextInt();
         }
+        scanner.close();
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
+        int[] sequenceLenghtArray = new int[numbersArray.length];
+        int[] prev = new int[numbersArray.length];
 
+        // Инициализация
+        for (int i = 0; i < numbersArray.length; i++) {
+            sequenceLenghtArray[i] = 1;
+            prev[i] = -1;
+        }
+
+        // Динамическое программирование
+        int maxLength = 1;
+        int maxIndex = 0;
+        for (int i = 1; i < numbersArray.length; i++) {
+            for (int j = 0; j < i; j++)
+                if (numbersArray[j] >= numbersArray[i] && sequenceLenghtArray[j] + 1 > sequenceLenghtArray[i]) {
+                    sequenceLenghtArray[i] = sequenceLenghtArray[j] + 1;
+                    prev[i] = j;
+                }
+            if (sequenceLenghtArray[i] > maxLength) {
+                maxLength = sequenceLenghtArray[i];
+                maxIndex = i;
+            }
+        }
+
+        // Восстановление максимальной убывающей подпоследовательности
+        List<Integer> result = new ArrayList<>();
+        while (maxIndex != -1) {
+            result.add(0, maxIndex + 1); // Индексы начинаются с 1
+            maxIndex = prev[maxIndex];
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return result.size();
     }
 
 

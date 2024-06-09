@@ -3,6 +3,7 @@ package by.it._310971_hrakovich.lesson05;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -33,50 +34,72 @@ import java.util.Scanner;
 public class C_QSortOptimized {
 
     //отрезок
-    private class Segment  implements Comparable{
+    private class Segment implements Comparable<Segment>{
         int start;
         int stop;
 
         Segment(int start, int stop){
+            if (start > stop) {
+                this.start = stop;
+                this.stop = start;
+                return;
+            }
             this.start = start;
             this.stop = stop;
         }
 
         @Override
-        public int compareTo(Object o) {
+        public int compareTo(Segment o) {
             //подумайте, что должен возвращать компаратор отрезков
-            return 0;
+            int difference = this.start-o.start;
+            if (difference == 0)
+                difference = this.stop-o.stop;
+            return difference;
         }
     }
 
 
-    int[] getAccessory2(InputStream stream) throws FileNotFoundException {
+    private Segment[] segments;
+    public int[] getAccessory2(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //число отрезков отсортированного массива
-        int n = scanner.nextInt();
-        Segment[] segments=new Segment[n];
+        int recordsNumber = scanner.nextInt();
+        segments = new Segment[recordsNumber];
         //число точек
-        int m = scanner.nextInt();
-        int[] points=new int[m];
-        int[] result=new int[m];
+        int eventsNumber = scanner.nextInt();
+        int[] events = new int[eventsNumber];
+        int[] result = new int[eventsNumber];
 
         //читаем сами отрезки
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < recordsNumber; i++) {
             //читаем начало и конец каждого отрезка
             segments[i]=new Segment(scanner.nextInt(),scanner.nextInt());
         }
         //читаем точки
-        for (int i = 0; i < n; i++) {
-            points[i]=scanner.nextInt();
+        for (int i = 0; i < eventsNumber; i++) {
+            events[i]=scanner.nextInt();
         }
+        scanner.close();
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-
+        Arrays.sort(segments);
+        for (int i = 0; i < events.length; i++){
+            for (int j = binarySearch(segments.length, events[i]); j >= 0; j--)
+                if (events[i] < segments[j].stop)
+                    result[i]++;
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
+    }
+
+    private int binarySearch(int midSegment, int searchedNumber){
+        midSegment = midSegment/2;
+        if (segments[midSegment].start > searchedNumber)
+            midSegment = binarySearch(midSegment, searchedNumber);
+        return midSegment;
     }
 
 

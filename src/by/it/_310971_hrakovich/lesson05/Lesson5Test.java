@@ -19,7 +19,6 @@ public class Lesson5Test {
         assertTrue("A failed", ok);
     }
 
-
     @Test
     public void B() throws Exception {
         String root = System.getProperty("user.dir") + "/src/";

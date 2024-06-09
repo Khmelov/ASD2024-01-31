@@ -3,7 +3,9 @@ package by.it._310971_hrakovich.lesson04;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /*
 Рассчитать число инверсий одномерного массива.
@@ -35,6 +37,18 @@ Sample Output:
 
 public class C_GetInversions {
 
+    private static class finderTread extends Thread {
+        public int[] numbers;
+
+        @Override
+        public void run() {
+            for (int j = 1; j < numbers.length; j++)
+                if (numbers[0] > numbers[j])
+                    result.incrementAndGet();
+        }
+    }
+
+    private static AtomicInteger result;
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -42,23 +56,27 @@ public class C_GetInversions {
         //размер массива
         int n = scanner.nextInt();
         //сам массив
-        int[] a = new int[n];
+        int[] numbers = new int[n];
         for (int i = 0; i < n; i++) {
-            a[i] = scanner.nextInt();
+            numbers[i] = scanner.nextInt();
         }
-        int result = 0;
+        scanner.close();
+        result = new AtomicInteger(0);
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
-
+        int inversionNumber = numbers.length - 1;
+        for (int i = 0; i < inversionNumber; i++){
+            var tread = new finderTread();
+            tread.numbers = Arrays.copyOfRange(numbers, i, numbers.length);
+            tread.run();
+        }
+        // int r = 0;
+        // for (int i = 0; i < inversionNumber; i++)
+        //     for (int j = i+1; j < numbers.length; j++)
+        //         if (numbers[i] > numbers[j])
+        //             r++;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return result.intValue();
+        //return r;
     }
 
 
@@ -66,9 +84,10 @@ public class C_GetInversions {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");
         C_GetInversions instance = new C_GetInversions();
-        //long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         int result = instance.calc(stream);
-        //long finishTime = System.currentTimeMillis();
+        long finishTime = System.currentTimeMillis();
+        System.out.print(finishTime - startTime);
         System.out.print(result);
     }
 }

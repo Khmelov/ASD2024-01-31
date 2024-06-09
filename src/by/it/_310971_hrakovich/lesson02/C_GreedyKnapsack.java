@@ -14,6 +14,7 @@ package by.it._310971_hrakovich.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -37,9 +38,11 @@ public class C_GreedyKnapsack {
         @Override
         public int compareTo(Item o) {
             //тут может быть ваш компаратор
+            //сортировка по стоимости на единицу веса в порядке убывания
+            double thisValue = (double) this.cost / this.weight;
+            double oValue = (double) o.cost / o.weight;
+            return Double.compare(oValue, thisValue);
 
-
-            return 0;
         }
     }
 
@@ -57,19 +60,34 @@ public class C_GreedyKnapsack {
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
+        //сортировка предметов по стоимости на единицу веса в порядке убывания
+        Arrays.sort(items);
+
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
-        double result = 0;
+
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
-
-
-
-
+        double result = 0;
+        int currentWeight = 0;
+        for (Item item : items){
+            if (currentWeight + item.weight <= W) {
+                //если предмет помещается в рюкзак целиком, то добавляем его
+                result += item.cost;
+                currentWeight += item.weight;
+            }
+            else {
+                //если предмет не помещается в рюкзак целиком, то добавляем его частично
+                int remainingWeight = W - currentWeight;
+                result += ((double) item.cost / item.weight) * remainingWeight;
+                currentWeight = W;
+                break;
+            }
+        }
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
