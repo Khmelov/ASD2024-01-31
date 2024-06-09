@@ -2,6 +2,8 @@ package by.it._310971_hrakovich.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -52,7 +54,24 @@ public class B_Huffman {
         //тут запишите ваше решение
 
 
+        Map<String, Character> codes = new HashMap<>();
+        for (int i = 0; i < count; i++) {
+            String letter = scanner.next().substring(0, 1); // буква
+            String code = scanner.next(); // код
+            codes.put(code, letter.charAt(0));
+        }
+        String encodedString = scanner.next(); // закодированная строка
 
+        // Декодирование закодированной строки
+        StringBuilder codeBuilder = new StringBuilder();
+        for (char c : encodedString.toCharArray()) {
+            codeBuilder.append(c);
+            String code = codeBuilder.toString();
+            if (codes.containsKey(code)) {
+                result.append(codes.get(code));
+                codeBuilder.setLength(0); // Очистить буфер
+            }
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111

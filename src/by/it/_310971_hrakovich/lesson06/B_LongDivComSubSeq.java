@@ -43,8 +43,21 @@ public class B_LongDivComSubSeq {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
 
+
+        int[] dp = new int[n];
+        dp[0] = 1;
+        int result = 1;
+
+        for (int i = 1; i < n; i++){
+            dp[i] = 1;
+            for (int j = 0; j<i; j++){
+                if (m[i] % m[j] == 0){
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            result = Math.max(result, dp[i]);
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
