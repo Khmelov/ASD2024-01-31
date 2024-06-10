@@ -74,7 +74,7 @@ public class B_MergeSort {
         int[] result=instance.getMergeSort(stream);
         //long finishTime = System.currentTimeMillis();
         for (int index:result)
-            System.out.print(index+" ");
+            System.out.print(index + " ");
     }
 
 

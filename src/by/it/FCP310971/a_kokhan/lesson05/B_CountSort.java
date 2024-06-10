@@ -36,8 +36,8 @@ public class B_CountSort {
         for (int i = 0; i < pointsNumber; i++)
             numberEntryArray[points[i]]++;
         int[] result = new int[pointsNumber];
-        for (int i = 9; i >= 0; i--) {
-            for (int j = 0; j < numberEntryArray[i]; j++)
+        for (int i = 9; i >= 0; i--)
+            for (int j = 0; j < numberEntryArray[i]; j++) {
                 pointsNumber--;
                 result[pointsNumber] = i;
             }
