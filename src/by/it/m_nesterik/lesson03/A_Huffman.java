@@ -1,5 +1,4 @@
-package by.it.a_khmelev.lesson03;
-
+package by.it.m_nesterik.lesson03;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -79,6 +78,12 @@ public class A_Huffman {
             this.right = right;
         }
 
+        InternalNode() {
+            super(0);
+            this.left = null;
+            this.right = null;
+        }
+
         @Override
         void fillCodes(String code) {
             left.fillCodes(code + "0");
@@ -121,11 +126,28 @@ public class A_Huffman {
 
         Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
 
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-
+        for (int i = 0; i < s.length(); i++) {
+            char currentChar = s.charAt(i);
+            if (!count.containsKey(currentChar))
+                count.put(currentChar, 1);
+            else
+                count.put(currentChar, count.get(currentChar) + 1);
+        }
+        for (Map.Entry<Character, Integer> temp : count.entrySet()) {
+            Node node = new LeafNode(temp.getValue(), temp.getKey());
+            priorityQueue.add(node);
+        }
+        Node head = new InternalNode();
+        while (priorityQueue.size() != 1) {
+            Node lNode = priorityQueue.poll();
+            Node rNode = priorityQueue.poll();
+            head = new InternalNode(lNode, rNode);
+            priorityQueue.add(head);
+        }
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
@@ -135,6 +157,10 @@ public class A_Huffman {
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         StringBuilder sb = new StringBuilder();
         //.....
+        head.fillCodes("");
+        for (int i = 0; i < s.length(); i++) {
+            sb.append(codes.get(s.charAt(i)));
+        }
 
         return sb.toString();
         //01001100100111

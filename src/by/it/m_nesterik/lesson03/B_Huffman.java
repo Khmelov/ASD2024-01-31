@@ -1,7 +1,10 @@
-package by.it.a_khmelev.lesson03;
+package by.it.m_nesterik.lesson03;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -28,7 +31,6 @@ import java.util.Scanner;
 //        Sample Output 1:
 //        a
 
-
 //        Sample Input 2:
 //        4 14
 //        a: 0
@@ -48,23 +50,34 @@ public class B_Huffman {
         Scanner scanner = new Scanner(file);
         Integer count = scanner.nextInt();
         Integer length = scanner.nextInt();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        Map<String, Character> codeToSymbol = new HashMap<>();
+        for (int i = 0; i < count; i++) {
+            String letter = scanner.next(); // "letter:"
+            String code = scanner.next(); // "code"
+            codeToSymbol.put(code, letter.charAt(0));
+        }
+        String encodedString = scanner.next();
+        int currentPosition = 0;
+        while (currentPosition < encodedString.length()) {
+            for (Map.Entry<String, Character> entry : codeToSymbol.entrySet()) {
+                if (encodedString.startsWith(entry.getKey(), currentPosition)) {
+                    result.append(entry.getValue());
+                    currentPosition += entry.getKey().length();
+                    break;
+                }
+            }
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        File f = new File(root + "by/it/a_khmelev/lesson03/encodeHuffman.txt");
+        File f = new File(root + "by/it/group310971/m_nesterik/lesson03/encodeHuffman.txt");
         B_Huffman instance = new B_Huffman();
         String result = instance.decode(f);
         System.out.println(result);
     }
-
-
 }

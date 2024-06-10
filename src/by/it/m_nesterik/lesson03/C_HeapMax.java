@@ -1,5 +1,4 @@
-package by.it.a_khmelev.lesson03;
-
+package by.it.m_nesterik.lesson03;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -44,21 +43,57 @@ public class C_HeapMax {
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вверх
-
+            int parent = (i - 1) / 2; // индекс родителя
+            while (i > 0 && heap.get(i) > heap.get(parent)) {
+                // обмен местами с родителем
+                long temp = heap.get(i);
+                heap.set(i, heap.get(parent));
+                heap.set(parent, temp);
+                // переход к родителю
+                i = parent;
+                parent = (i - 1) / 2;
+            }
             return i;
         }
 
         int siftUp(int i) { //просеивание вниз
-
+            int left = 2 * i + 1; // индекс левого потомка
+            int right = 2 * i + 2; // индекс правого потомка
+            while (left < heap.size()) {
+                int maxChild = left; // предполагаем, что левый потомок больше
+                if (right < heap.size() && heap.get(right) > heap.get(left)) {
+                    maxChild = right; // если правый потомок больше, то берем его
+                }
+                if (heap.get(i) < heap.get(maxChild)) {
+                    // обмен местами с максимальным потомком
+                    long temp = heap.get(i);
+                    heap.set(i, heap.get(maxChild));
+                    heap.set(maxChild, temp);
+                    // переход к потомку
+                    i = maxChild;
+                    left = 2 * i + 1;
+                    right = 2 * i + 2;
+                } else {
+                    // если текущий элемент больше, то просеивание завершено
+                    break;
+                }
+            }
             return i;
         }
 
         void insert(Long value) { //вставка
+            heap.add(value); // добавляем в конец кучи
+            siftDown(heap.size() - 1); // просеиваем новый элемент вниз
         }
 
         Long extractMax() { //извлечение и удаление максимума
             Long result = null;
-
+            if (!heap.isEmpty()) {
+                result = heap.get(0); // максимальный элемент находится в корне
+                heap.set(0, heap.get(heap.size() - 1)); // заменяем корень последним элементом
+                heap.remove(heap.size() - 1); // удаляем последний элемент
+                siftUp(0); // просеиваем новый корень вверх
+            }
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -84,7 +119,7 @@ public class C_HeapMax {
                 if (p[0].equalsIgnoreCase("insert"))
                     heap.insert(Long.parseLong(p[1]));
                 i++;
-            //System.out.println(heap); //debug
+                //System.out.println(heap); //debug
             }
         }
         return maxValue;
@@ -92,7 +127,7 @@ public class C_HeapMax {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson03/heapData.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/m_nesterik/lesson03/heapData.txt");
         C_HeapMax instance = new C_HeapMax();
         System.out.println("MAX="+instance.findMaxValue(stream));
     }
