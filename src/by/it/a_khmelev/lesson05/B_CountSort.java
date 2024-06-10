@@ -5,50 +5,51 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-/*
-Первая строка содержит число 1<=n<=10000, вторая - n натуральных чисел, не превышающих 10.
-Выведите упорядоченную по неубыванию последовательность этих чисел.
-
-При сортировке реализуйте метод со сложностью O(n)
-
-Пример: https://karussell.wordpress.com/2010/03/01/fast-integer-sorting-algorithm-on/
-Вольный перевод: http://programador.ru/sorting-positive-int-linear-time/
-*/
-
 public class B_CountSort {
 
-
     int[] countSort(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
+        // подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //размер массива
+
+        // размер массива
         int n = scanner.nextInt();
-        int[] points=new int[n];
+        int[] points = new int[n];
 
-        //читаем точки
+        // читаем точки
         for (int i = 0; i < n; i++) {
-            points[i]=scanner.nextInt();
+            points[i] = scanner.nextInt();
         }
-        //тут реализуйте логику задачи с применением сортировки подсчетом
 
+        // максимальное значение в массиве
+        int maxValue = 10;
 
+        // массив для подсчета количества вхождений каждого числа
+        int[] count = new int[maxValue + 1];
 
+        // подсчитываем количество каждого числа в исходном массиве
+        for (int i = 0; i < n; i++) {
+            count[points[i]]++;
+        }
 
+        // восстанавливаем отсортированный массив
+        int index = 0;
+        for (int i = 1; i <= maxValue; i++) {
+            while (count[i] > 0) {
+                points[index++] = i;
+                count[i]--;
+            }
+        }
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return points;
     }
 
-
     public static void main(String[] args) throws FileNotFoundException {
-        String root = System.getProperty("user.dir") + "/src/";
+        String root = System.getProperty("user.dir") + "/ASD2024-01-31/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson05/dataB.txt");
         B_CountSort instance = new B_CountSort();
-        int[] result=instance.countSort(stream);
-        for (int index:result){
-            System.out.print(index+" ");
+        int[] result = instance.countSort(stream);
+        for (int index : result) {
+            System.out.print(index + " ");
         }
     }
-
 }
