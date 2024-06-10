@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.m_nesterik.lesson01.lesson01;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -8,6 +8,8 @@ package by.it.a_khmelev.lesson01;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigInteger;
+import java.util.Scanner;
 
 public class FiboC {
 
@@ -28,17 +30,35 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        List<Long> o = new ArrayList<>();
-        o.add(0L);
-        o.add(1L);
-        int i = 2;
-        while (!(o.get(i - 2) == 0 && o.get(i - 1) == 1) || i <= 2) {
-            o.add((o.get(i - 2) + o.get(i - 1)) % m);
-            i++;
+        if (n <= 1) {
+            return n % m;
         }
-        return o.get((int) (n % (i - 2)));
+
+        List<Long> pisanoPeriod = new ArrayList<>();
+        pisanoPeriod.add(0L);
+        pisanoPeriod.add(1L);
+
+        for (int i = 2; i < m * m; i++) {
+            pisanoPeriod.add((pisanoPeriod.get(i - 1) + pisanoPeriod.get(i - 2)) % m);
+
+            // Если мы нашли начало следующего периода Пизано, выходим из цикла
+            if (pisanoPeriod.get(i) == 1 && pisanoPeriod.get(i - 1) == 0) {
+                pisanoPeriod.remove(i);
+                pisanoPeriod.remove(i - 1);
+                break;
+            }
+        }
+
+        int pisanoLength = pisanoPeriod.size();
+        int remainderIndex = (int) (n % pisanoLength);
+
+        return pisanoPeriod.get(remainderIndex);
     }
 
-
 }
+
+
+
+
+
 
