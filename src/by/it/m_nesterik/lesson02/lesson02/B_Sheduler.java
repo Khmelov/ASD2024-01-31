@@ -1,7 +1,8 @@
-package by.it.a_khmelev.lesson02;
+package by.it.m_nesterik.lesson02.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -48,7 +49,27 @@ public class B_Sheduler {
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
+        Arrays.sort(events, (o1,o2) ->
+        {
+            if(o1.stop!=o2.stop){
+                return Integer.compare(o1.stop,o2.stop);
+                // Если время окончания событий o1.stop и o2.stop различаются, сортируем по возрастанию времени окончания.
+            }else return Integer.compare(o1.start,o2.start);
+            // Если время окончания одинаковое, сортируем по возрастанию времени начала событий o1.start и o2.start.
+        });
+        int i = 0;
 
+        int curentEventTime = 0;
+        while (i < events.length){
+            if (curentEventTime > events[i].start) ++i;
+                // Если время начала текущего события events[i].start меньше или равно текущему времени curentEventTime, пропускается событие (++i;), так как оно будет пересекаться с предыдущим.
+            else
+            //Иначе добавляется текущее событие events[i] в список result и обновляет curentEventTime на время окончания этого события events[i].stop.
+            {
+                curentEventTime = events[i].stop;
+                result.add(events[i]);
+            }
+        }
 
 
 
