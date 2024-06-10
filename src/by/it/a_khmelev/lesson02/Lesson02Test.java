@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class Lesson02Test {
@@ -24,7 +25,7 @@ public class Lesson02Test {
         double[] events=new double[]{1, 1.1, 1.6, 2.2, 2.4, 2.7, 3.9, 8.1, 9.1, 5.5, 3.7};
         List<Double> starts=instance.calcStartTimes(events,1); //рассчитаем моменты старта, с длинной сеанса 1
         boolean ok=starts.toString().equals("[1.0, 2.2, 3.7, 5.5, 8.1]");
-        assertTrue("slowA failed", ok);
+        assertTrue("slowA failed", ok); //вызовет false, тк строки не совпадают с ожидаемым списком
     }
 
     @Test(timeout = 2000)
@@ -44,7 +45,7 @@ public class Lesson02Test {
     }
     @Test(timeout = 2000)
     public void C_GreedyKnapsack() throws Exception {
-        String root=System.getProperty("user.dir")+"/src/";
+        String root=System.getProperty("user.dir")+"/ASD2024-01-31/src/";
         File file=new File(root+"by/it/a_khmelev/lesson02/greedyKnapsack.txt");
         double costFinal=new C_GreedyKnapsack().calc(file);
         boolean ok=costFinal==200;
