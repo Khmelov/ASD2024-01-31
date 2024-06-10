@@ -1,5 +1,8 @@
-package by.it.a_khmelev.lesson04;
+package by.it.m_nesterik.lesson04;
 
+import by.it.m_nesterik.lesson04.A_BinaryFind;
+import by.it.m_nesterik.lesson04.B_MergeSort;
+import by.it.m_nesterik.lesson04.C_GetInversions;
 import org.junit.Test;
 
 import java.io.FileInputStream;

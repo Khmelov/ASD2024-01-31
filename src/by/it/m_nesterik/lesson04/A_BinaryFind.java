@@ -1,4 +1,5 @@
-package by.it.a_khmelev.lesson04;
+
+package by.it.m_nesterik.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,14 +16,11 @@ import java.util.Scanner;
         - k натуральных чисел b1,...,bk не превышающих 10E9 (сами числа)
 Для каждого i от 1 до kk необходимо вывести индекс 1<=j<=n,
 для которого A[j]=bi, или -1, если такого j нет.
-
         Sample Input:
         5 1 5 8 12 13
         5 8 1 23 1 11
-
         Sample Output:
         3 1 -1 1 -1
-
 (!) Обратите внимание на смещение начала индекса массивов JAVA относительно условий задачи
 */
 
@@ -46,11 +44,22 @@ public class A_BinaryFind {
         for (int i = 0; i < k; i++) {
             int value = scanner.nextInt();
             //тут реализуйте бинарный поиск индекса
-
-
-
-
-            result[i]=0;
+            int left = 0;
+            int right = n - 1;
+            while (left <= right) {
+                int middle = (left + right) / 2;
+                if (a[middle] == value) {
+                    result[i] = middle + 1; // индекс в массиве a
+                    break;
+                } else if (a[middle] < value) {
+                    left = middle + 1;
+                } else {
+                    right = middle - 1;
+                }
+            }
+            if (left > right) { // не нашли
+                result[i] = -1;
+            }
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
@@ -59,7 +68,7 @@ public class A_BinaryFind {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataA.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/m_nesterik/lesson04/dataA.txt");
         A_BinaryFind instance = new A_BinaryFind();
         //long startTime = System.currentTimeMillis();
         int[] result=instance.findIndex(stream);
