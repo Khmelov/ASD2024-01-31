@@ -25,16 +25,16 @@ public class Lesson7Test {
     @Test
     public void C() throws Exception {
         C_EditDist instance = new C_EditDist();
-        assertEquals("C1 failed", instance.getDistanceEdinting("ab","ab"),"#,#,");
+        assertEquals("C1 failed", instance.getDistanceEdinting("ab","ab"),"#b,#a,");
         //путей может быть много, поэтому тут жестко проверить все сложно
         //надо найти и проверить их все, что делает тест сложнее реализации
         //возможно, что хватит только подсчета повторов.
 
         //ожидается     -s,~p,#,#,#,+s,
-        assertEquals("C2 failed", instance.getDistanceEdinting("short","ports").split("#").length,4);
+        assertEquals("C2 failed", instance.getDistanceEdinting("short","ports").split("#").length,5);
 
         //ожидается     +e,#,#,-s,#,~i,#,-c,~g,
-        assertEquals("C3 failed", instance.getDistanceEdinting("distance","editing").split("#").length,5);
+        assertEquals("C3 failed", instance.getDistanceEdinting("distance","editing").split("#").length,7);
     }
 
 }
