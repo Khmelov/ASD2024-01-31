@@ -54,7 +54,7 @@ public class A_BinaryFind {
             while (left <= right) {
                 mid = left + (right - left) / 2;
                 if (array[mid] == value) {
-                    result[i] = mid;
+                    result[i] = mid + 1;
                     break;
                 } else if (array[mid] < value)
                     left = mid + 1;
