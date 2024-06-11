@@ -1,51 +1,38 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package by.it.a_khmelev.lesson01;
 
 import java.math.BigInteger;
 
-/*
- * Вам необходимо выполнить рекурсивный способ вычисления чисел Фибоначчи
- */
-
 public class FiboA {
-
-
     private long startTime = System.currentTimeMillis();
+
+    public FiboA() {
+    }
 
     public static void main(String[] args) {
         FiboA fibo = new FiboA();
         int n = 33;
-        System.out.printf("calc(%d)=%d \n\t time=%d \n\n", n, fibo.calc(n), fibo.time());
-
-        //вычисление чисел фибоначчи медленным методом (рекурсией)
+        System.out.printf("calc(%d)=%d \n\t time=%d \n\n", Integer.valueOf(n), fibo.calc(n), fibo.time());
         fibo = new FiboA();
         n = 34;
-        System.out.printf("slowA(%d)=%d \n\t time=%d \n\n", n, fibo.slowA(n), fibo.time());
+        System.out.printf("slowA(%d)=%d \n\t time=%d \n\n", Integer.valueOf(n), fibo.slowA(Integer.valueOf(n)), fibo.time());
     }
 
     private long time() {
-        long res = System.currentTimeMillis() - startTime;
-        startTime = System.currentTimeMillis();
+        long res = System.currentTimeMillis() - this.startTime;
+        this.startTime = System.currentTimeMillis();
         return res;
     }
 
     private int calc(int n) {
-        //здесь простейший вариант, в котором код совпадает
-        //с математическим определением чисел Фибоначчи
-        //время O(2^n)
         return 0;
     }
 
-
     BigInteger slowA(Integer n) {
-        //рекурсия
-        //здесь нужно реализовать вариант без ограничения на размер числа,
-        //в котором код совпадает с математическим определением чисел Фибоначчи
-        //время O(2^n)
-
-
         return BigInteger.ZERO;
     }
-
-
 }
-
