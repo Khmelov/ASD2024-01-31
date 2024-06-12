@@ -49,24 +49,67 @@ import java.util.Scanner;
 
 public class C_EditDist {
 
-    String getDistanceEdinting(String one, String two) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+    String getDistanceEditing(String one, String two) {
+        int n = one.length();
+        int m = two.length();
 
+        int[][] dp = new int[n + 1][m + 1];
 
-        String result = "";
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                if (i == 0) {
+                    dp[i][j] = j;
+                } else if (j == 0) {
+                    dp[i][j] = i;
+                } else if (one.charAt(i - 1) == two.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], Math.min(dp[i][j - 1], dp[i - 1][j]));
+                }
+            }
+        }
+
+        // Вычисляем операции редактирования
+        StringBuilder result = new StringBuilder();
+        int i = n, j = m;
+        while (i > 0 && j > 0) {
+            if (one.charAt(i - 1) == two.charAt(j - 1)) {
+                result.insert(0, "#,");
+                i--;
+                j--;
+            } else if (dp[i - 1][j] < dp[i][j - 1]) {
+                result.insert(0, "-").insert(1, one.charAt(i - 1)).insert(2, ",");
+                i--;
+            } else if (dp[i - 1][j] > dp[i][j - 1]) {
+                result.insert(0, "+").insert(1, two.charAt(j - 1)).insert(2, ",");
+                j--;
+            } else {
+                result.insert(0, "~").insert(1, two.charAt(j - 1)).insert(2, ",");
+                i--;
+                j--;
+            }
+        }
+
+        while (i > 0) {
+            result.insert(0, "-").insert(1, one.charAt(i - 1)).insert(2, ",");
+            i--;
+        }
+
+        while (j > 0) {
+            result.insert(0, "+").insert(1, two.charAt(j - 1)).insert(2, ",");
+            j--;
+        }
+
+        return result.toString();
     }
-
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");
         C_EditDist instance = new C_EditDist();
         Scanner scanner = new Scanner(stream);
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
+        System.out.println(instance.getDistanceEditing(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEditing(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEditing(scanner.nextLine(), scanner.nextLine()));
     }
-
 }
