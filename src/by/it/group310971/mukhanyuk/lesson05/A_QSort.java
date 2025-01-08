@@ -1,10 +1,10 @@
-package by.it.a_khmelev.lesson05;
+package by.it.group310971.mukhanyuk.lesson05;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
-
+import java.util.Arrays;
 /*
 Видеорегистраторы и площадь.
 На площади установлена одна или несколько камер.
@@ -79,12 +79,18 @@ public class A_QSort {
         for (int i = 0; i < m; i++) {
             points[i]=scanner.nextInt();
         }
-        //тут реализуйте логику задачи с применением быстрой сортировки
+        Arrays.sort(segments);//тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-
-
-
-
+        for (int i = 0; i < m; i++) {
+            int point = points[i];
+            int count = 0;
+            for (Segment segment : segments) {
+                if (segment.start <= point && point <= segment.stop) {
+                    count++;
+                }
+            }
+            result[i] = count;
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
@@ -92,7 +98,7 @@ public class A_QSort {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson05/dataA.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group310971/mukhanyuk/lesson05/dataA.txt");
         A_QSort instance = new A_QSort();
         int[] result=instance.getAccessory(stream);
         for (int index:result){
