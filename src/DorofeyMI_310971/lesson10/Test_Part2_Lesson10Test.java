@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson10;
+package DorofeyMI_310971.lesson10;
 
 
 import by.it.HomeWork;
@@ -158,6 +158,7 @@ public class Test_Part2_Lesson10Test extends HomeWork {
         System.out.println("expected: " + eObject);
         System.out.println("  actual: " + aObject);
     }
+
 
     private Object[] getRandomParams(Class<?>[] parameterTypes) {
         Object[] parameters = new Object[parameterTypes.length];

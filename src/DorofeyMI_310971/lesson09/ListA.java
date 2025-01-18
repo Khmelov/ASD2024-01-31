@@ -4,15 +4,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import java.util.*;
-
 public class ListA<E> implements List<E> {
     private E[] elements;
     private int size;
 
     @SuppressWarnings("unchecked")
     public ListA() {
-        elements = (E[]) new Object[10]; // начальная емкость
+        elements = (E[]) new Object[10]; // initial capacity
         size = 0;
     }
 
@@ -43,12 +41,12 @@ public class ListA<E> implements List<E> {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        E removedElement = elements[index];
+        E oldValue = elements[index];
         for (int i = index; i < size - 1; i++) {
             elements[i] = elements[i + 1];
         }
-        elements[--size] = null;
-        return removedElement;
+        elements[--size] = null; // clear to let GC do its work
+        return oldValue;
     }
 
     @Override
@@ -73,9 +71,9 @@ public class ListA<E> implements List<E> {
 
     @Override
     public boolean remove(Object o) {
-        for (int i = 0; i < size; i++) {
-            if (Objects.equals(elements[i], o)) {
-                remove(i);
+        for (int index = 0; index < size; index++) {
+            if (o.equals(elements[index])) {
+                remove(index);
                 return true;
             }
         }
@@ -87,9 +85,9 @@ public class ListA<E> implements List<E> {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        E oldElement = elements[index];
+        E oldValue = elements[index];
         elements[index] = element;
-        return oldElement;
+        return oldValue;
     }
 
     @Override
@@ -108,7 +106,7 @@ public class ListA<E> implements List<E> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
-            if (Objects.equals(elements[i], o)) {
+            if (o.equals(elements[i])) {
                 return i;
             }
         }
@@ -131,7 +129,7 @@ public class ListA<E> implements List<E> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = size - 1; i >= 0; i--) {
-            if (Objects.equals(elements[i], o)) {
+            if (o.equals(elements[i])) {
                 return i;
             }
         }
@@ -168,7 +166,7 @@ public class ListA<E> implements List<E> {
     public boolean removeAll(Collection<?> c) {
         boolean modified = false;
         for (Object e : c) {
-            while (remove(e)) {
+            if (remove(e)) {
                 modified = true;
             }
         }
@@ -190,46 +188,38 @@ public class ListA<E> implements List<E> {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
-            throw new IndexOutOfBoundsException("fromIndex: " + fromIndex + ", toIndex: " + toIndex);
-        }
-        ListA<E> subList = new ListA<>();
-        for (int i = fromIndex; i < toIndex; i++)
-        {
-            subList.add(elements[i]);
-        }
-        return subList;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        throw new UnsupportedOperationException("listIterator not supported");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ListIterator<E> listIterator() {
-        throw new UnsupportedOperationException("listIterator not supported");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        throw new UnsupportedOperationException("toArray not supported");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Object[] toArray() {
-        throw new UnsupportedOperationException("toArray not supported");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Iterator<E> iterator() {
-        throw new UnsupportedOperationException("iterator not supported");
+        throw new UnsupportedOperationException();
     }
 
     @SuppressWarnings("unchecked")
     private void resize() {
-        E[] newElements = (E[]) new Object[elements.length * 2];
-        System.arraycopy(elements, 0, newElements, 0, size);
-        elements = newElements;
+        E[] newArray = (E[]) new Object[elements.length * 2];
+        System.arraycopy(elements, 0, newArray, 0, size);
+        elements = newArray;
     }
 }

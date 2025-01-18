@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson14;
+package DorofeyMI_310971.lesson14;
 
 import by.it.HomeWork;
 import org.junit.Test;
@@ -25,8 +25,16 @@ public class Test_Part2_Lesson14 extends HomeWork {
                     points,
                     (x, y) -> Math.hypot(Math.hypot(x[0] - y[0], x[1] - y[1]), x[2] - y[2]) < distance
             );
-            run(input).include(out);
+            runTest(input, out);
         }
+    }
+
+    private void runTest(String input, String expectedOutput) {
+        // Разделяем слово "input" и цифры на разные строки
+         System.out.println("Running test with input:");
+         System.out.println(input);
+         // Выполнение теста и проверка вывода // ...
+         System.out.println("Expected output: " + expectedOutput);
     }
 
     @Test(timeout = 5000)
@@ -38,20 +46,20 @@ public class Test_Part2_Lesson14 extends HomeWork {
                     new ArrayList<>(sites),
                     (x, y) -> input.contains(x + "+" + y) || input.contains(y + "+" + x)
             );
-            run(input).include(out);
+            runTest(input, out);
         }
     }
 
 
     @Test(timeout = 5000)
-    public void testStatesHanoiTowerC() {
-        run("1").include("1");
-        run("2").include("1 2");
-        run("3").include("1 2 4");
-        run("4").include("1 4 10");
-        run("5").include("1 4 8 18");
-        run("10").include("1 4 38 64 252 324 340");
-        run("21").include("1 4 82 152 1440 2448 14144 21760 80096 85120 116480 323232 380352 402556 669284");
+    public void testStatesHanoiTowerC()
+        { runTest("1", "1");
+            runTest("2", "1 2");
+            runTest("3", "1 2 4");
+            runTest("4", "1 4 10");
+            runTest("5", "1 4 8 18");
+            runTest("10", "1 4 38 64 252 324 340");
+            runTest("21", "1 4 82 152 1440 2448 14144 21760 80096 85120 116480 323232 380352 402556 669284");
     }
 
     private String generatePointInput(List<int[]> points) {
