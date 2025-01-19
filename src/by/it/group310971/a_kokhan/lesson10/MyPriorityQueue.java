@@ -36,7 +36,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return null;
     }
 
     @Override
@@ -213,9 +213,8 @@ public class MyPriorityQueue<E> implements Queue<E> {
         sb.append("[");
         for(int i = 0; i < size; i++){
             sb.append(data[i]);
-            if(i < size-1){
+            if(i < size-1)
                 sb.append(", ");
-            }
         }
         sb.append("]");
         return sb.toString();
