@@ -1,12 +1,14 @@
 package by.it.group310971.a_kokhan.lesson09;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 public class ListA<E> implements List<E> {
-
+    
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
 
     /////////////////////////////////////////////////////////////////////////
@@ -14,24 +16,75 @@ public class ListA<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
+    private int size = 0;
+    private Node<E> first;
+    private Node<E> last;
+
+    private static class Node<E>{
+        E val;
+        Node<E> next;
+    }
+
     @Override
     public String toString() {
-        return "";
+        var stringBuilder = new StringBuilder(size * 2);
+        stringBuilder.append('[');
+        for (var node : this) {
+            stringBuilder.append(node.toString()).append(',').append(' ');
+        }
+        if (size > 0) {
+            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+            stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        }
+        stringBuilder.append(']');
+        return stringBuilder.toString();
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        var newNode = new Node<E>();
+        newNode.val = e;
+        if (last == null) {
+            last = newNode;
+            first = newNode;
+        } else {
+            last.next = newNode;
+            last = newNode;
+        }
+        size++;
+        return true;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        if (index < 0 || index > size - 1)
+            throw new IndexOutOfBoundsException();
+        E removedVal;
+        if (index == 0) {
+            removedVal = first.val;
+            first = first.next;
+            if (size == 1)
+                last = null;
+        } else {
+            var curNode = first;
+            index--;
+            for (int i = 0; i < index; i++)
+                curNode = curNode.next;
+            removedVal = curNode.next.val;
+            if (index == size - 2) {
+                last = curNode;
+                curNode.next = null;
+            } else {
+                curNode.next = curNode.next.next;
+            }
+        }
+        size--;
+        return removedVal;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -42,7 +95,20 @@ public class ListA<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
-
+        if (index > size - 1)
+            throw new ArrayIndexOutOfBoundsException();
+        var newNode = new Node<E>();
+        newNode.val = element;
+        if (index == 0) {
+            newNode.next = first;
+            first = newNode;
+            return;
+        }
+        var curNode = first;
+        for (var i = 0; i < index; i++)
+            curNode = curNode.next;
+        newNode.next = curNode.next;
+        curNode.next = newNode;
     }
 
     @Override
@@ -128,14 +194,22 @@ public class ListA<E> implements List<E> {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        if (a.length < size) {
+            return (T[]) Arrays.copyOf(toArray(), size, a.getClass());
+        }
+        System.arraycopy(toArray(), 0, a, 0, size);
+        if (a.length > size) {
+            a[size] = null;
+        }
+        return a;
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return toArray(new Object[0]);
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -146,7 +220,24 @@ public class ListA<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new kListIterator();
     }
 
+    private class kListIterator implements Iterator<E> {
+        private Node<E> current = first;
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+            E data = current.val;
+            current = current.next;
+            return data;
+        }
+    }
 }
