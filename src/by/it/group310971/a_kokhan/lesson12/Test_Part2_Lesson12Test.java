@@ -210,12 +210,14 @@ public class Test_Part2_Lesson12Test extends HomeWork {
             checkFieldAsCollection(field);
             for (Field subField : field.getType().getDeclaredFields()) {
                 checkFieldAsCollection(subField);
+                System.out.println();
             }
         }
     }
 
     private void checkFieldAsCollection(Field field) {
         Class<?> type = field.getType();
+        var a = Collection.class.isAssignableFrom(type);
         if (Collection.class.isAssignableFrom(type) || Map.class.isAssignableFrom(type)) {
             fail("Incorrect field: " + field);
         }
