@@ -108,6 +108,7 @@ public class SourceScannerC {
                     copiesMap.computeIfAbsent(processedFiles.get(i).path, k -> new ArrayList<>()).add(processedFiles.get(j).path);
                     copiesMap.computeIfAbsent(processedFiles.get(j).path, k -> new ArrayList<>()).add(processedFiles.get(i).path);
                 }
+                System.out.println(i + " " + j);
             }
         }
 
