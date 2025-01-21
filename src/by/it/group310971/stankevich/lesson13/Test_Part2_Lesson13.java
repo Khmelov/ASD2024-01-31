@@ -8,28 +8,53 @@ public class Test_Part2_Lesson13 extends HomeWork {
 
     @Test
     public void testGraphA() {
+        // Примеры с числовыми вершинами
         run("0 -> 1", true).include("0 1");
         run("0 -> 1, 1 -> 2", true).include("0 1 2");
         run("0 -> 2, 1 -> 2, 0 -> 1", true).include("0 1 2");
         run("0 -> 2, 1 -> 3, 2 -> 3, 0 -> 1", true).include("0 1 2 3");
         run("1 -> 3, 2 -> 3, 2 -> 3, 0 -> 1, 0 -> 2", true).include("0 1 2 3");
         run("0 -> 1, 0 -> 2, 0 -> 2, 1 -> 3, 1 -> 3, 2 -> 3", true).include("0 1 2 3");
+
+        // Примеры со строковыми вершинами
         run("A -> B, A -> C, B -> D, C -> D", true).include("A B C D");
         run("A -> B, A -> C, B -> D, C -> D, A -> D", true).include("A B C D");
-        //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.
-        //Параметр метода run - это ввод. Параметр метода include - это вывод.
-        //Общее число примеров должно быть не менее 20 (сейчас их 8).
+
+        // Дополнительные примеры (различные структуры)
+        run("0 -> 1, 1 -> 2, 2 -> 3", true).include("0 1 2 3"); // Простой цепной граф
+        run("0 -> 1, 1 -> 3, 0 -> 2, 2 -> 3", true).include("0 1 2 3"); // Конвергенция
+        run("A -> B, B -> C, C -> D, D -> E", true).include("A B C D E"); // Длинная цепочка
+        run("X -> Y, Y -> Z, Z -> W", true).include("X Y Z W"); // Строковые вершины
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 4, 4 -> 5", true).include("0 1 2 3 4 5"); // Длинный линейный граф
+        run("A -> B, C -> D", true).include("A B C D"); // Разделенные компоненты
+        run("0 -> 1, 0 -> 2, 1 -> 3, 2 -> 3, 3 -> 4", true).include("0 1 2 3 4"); // Общая точка
+        run("A -> C, B -> C, D -> E", true).include("A B C D E"); // Несвязные компоненты
+        run("1 -> 3, 2 -> 3, 3 -> 4, 0 -> 1, 0 -> 2", true).include("0 1 2 3 4"); // Общие зависимости
+        run("A -> B, A -> C, B -> D, C -> E", true).include("A B C D E"); // Разделенные пути
+        run("A -> C, B -> C, C -> D, D -> E, E -> F", true).include("A B C D E F"); // Длинная цепочка с общими предками
+        run("1 -> 2, 2 -> 3, 3 -> 4, 4 -> 5, 5 -> 6", true).include("1 2 3 4 5 6"); // Длинный числовой граф
+
+        // Смешанные примеры
+        run("0 -> 1, A -> B, B -> C, C -> 2, 1 -> A", true).include("0 1 A B C 2"); // Смешанные числовые и строковые вершины
     }
+
 
     @Test
     public void testGraphB() {
         run("0 -> 1", true).include("no").exclude("yes");
         run("0 -> 1, 1 -> 2", true).include("no").exclude("yes");
         run("0 -> 1, 1 -> 2, 2 -> 0", true).include("yes").exclude("no");
-        //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.
-        //Параметр метода run - это ввод. Параметр метода include - это вывод.
-        //Общее число примеров должно быть не менее 12 (сейчас их 3).
+        run("0 -> 1, 1 -> 2, 2 -> 3", true).include("no").exclude("yes");
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 1", true).include("yes").exclude("no");
+        run("0 -> 1, 0 -> 2, 1 -> 3, 2 -> 3", true).include("no").exclude("yes");
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 4, 4 -> 5", true).include("no").exclude("yes");
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 4, 4 -> 2", true).include("yes").exclude("no");
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 0", true).include("yes").exclude("no");
+        run("0 -> 1, 1 -> 2, 2 -> 0, 0 -> 3, 3 -> 4", true).include("yes").exclude("no");
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 4, 5 -> 6, 6 -> 5", true).include("yes").exclude("no");
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 4, 5 -> 6", true).include("no").exclude("yes");
     }
+
 
     @Test
     public void testGraphC() {
@@ -37,10 +62,10 @@ public class Test_Part2_Lesson13 extends HomeWork {
                 .include("123\n456");
         run("C->B, C->I, I->A, A->D, D->I, D->B, B->H, H->D, D->E, H->E, E->G, A->F, G->F, F->K, K->G", true)
                 .include("C\nABDHI\nE\nFGK");
-        //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.
-        //Параметр метода run - это ввод. Параметр метода include - это вывод.
-        //Общее число примеров должно быть не менее 8 (сейчас их 2).
+        run("A->B, B->C, C->A, A->C, B->A, C->B", true)
+                .include("ABC");
     }
 
-
 }
+
+
