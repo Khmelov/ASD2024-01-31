@@ -3,150 +3,250 @@ package by.it.a_khmelev.lesson09;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
+import java.util.*;
 public class ListA<E> implements List<E> {
+    private Object[] elements;
+    private int size;
 
-    //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+    public ListA() {
+        elements = new Object[10];
+        size = 0;
+    }
 
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    //////               Обязательные к реализации методы             ///////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
-        return "";
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        for (int i = 0; i < size; i++) {
+            joiner.add(String.valueOf(elements[i]));
+        }
+        return joiner.toString();
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        ensureCapacity();
+        elements[size++] = e;
+        return true;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        validateIndex(index);
+        E removedElement = elementAt(index);
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        elements[--size] = null;
+        return removedElement;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
-
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    //////               Опциональные к реализации методы             ///////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
 
     @Override
     public void add(int index, E element) {
-
+        validateIndexForAdd(index);
+        ensureCapacity();
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+        elements[index] = element;
+        size++;
     }
 
     @Override
     public boolean remove(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(elements[i], o)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public E set(int index, E element) {
-        return null;
+        validateIndex(index);
+        E oldElement = elementAt(index);
+        elements[index] = element;
+        return oldElement;
     }
-
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
-
 
     @Override
     public void clear() {
-
+        Arrays.fill(elements, 0, size, null);
+        size = 0;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(elements[i], o)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public E get(int index) {
-        return null;
+        validateIndex(index);
+        return elementAt(index);
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return indexOf(o) >= 0;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        for (int i = size - 1; i >= 0; i--) {
+            if (Objects.equals(elements[i], o)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        for (Object o : c) {
+            if (!contains(o)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        for (E e : c) {
+            add(e);
+        }
+        return !c.isEmpty();
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+        validateIndexForAdd(index);
+        Object[] newElements = c.toArray();
+        int newSize = newElements.length;
+        ensureCapacity(size + newSize);
+        System.arraycopy(elements, index, elements, index + newSize, size - index);
+        System.arraycopy(newElements, 0, elements, index, newSize);
+        size += newSize;
+        return newSize > 0;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        return batchRemove(c, false);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        return batchRemove(c, true);
     }
-
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        validateIndex(fromIndex);
+        validateIndex(toIndex - 1);
+        ListA<E> subList = new ListA<>();
+        for (int i = fromIndex; i < toIndex; i++) {
+            subList.add(elementAt(i));
+        }
+        return subList;
     }
 
     @Override
-    public ListIterator<E> listIterator(int index) {
-        return null;
-    }
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            private int currentIndex = 0;
 
-    @Override
-    public ListIterator<E> listIterator() {
-        return null;
-    }
+            @Override
+            public boolean hasNext() {
+                return currentIndex < size;
+            }
 
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return elementAt(currentIndex++);
+            }
+        };
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return Arrays.copyOf(elements, size);
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    ////////        Эти методы имплементировать необязательно    ////////////
-    ////////        но они будут нужны для корректной отладки    ////////////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
     @Override
-    public Iterator<E> iterator() {
-        return null;
+    public <T> T[] toArray(T[] a) {
+        if (a.length < size) {
+            return (T[]) Arrays.copyOf(elements, size, a.getClass());
+        }
+        System.arraycopy(elements, 0, a, 0, size);
+        if (a.length > size) {
+            a[size] = null;
+        }
+        return a;
     }
 
+    @Override
+    public ListIterator<E> listIterator() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        throw new UnsupportedOperationException();
+    }
+
+    private void ensureCapacity() {
+        if (size == elements.length) {
+            elements = Arrays.copyOf(elements, elements.length * 2);
+        }
+    }
+
+    private void ensureCapacity(int minCapacity) {
+        if (minCapacity > elements.length) {
+            elements = Arrays.copyOf(elements, Math.max(elements.length * 2, minCapacity));
+        }
+    }
+
+    private void validateIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    private void validateIndexForAdd(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    private E elementAt(int index) {
+        return (E) elements[index];
+    }
+
+    private boolean batchRemove(Collection<?> c, boolean retain) {
+        boolean modified = false;
+        for (int i = 0; i < size; i++) {
+            if (c.contains(elements[i]) != retain) {
+                remove(i--);
+                modified = true;
+            }
+        }
+        return modified;
+    }
 }
