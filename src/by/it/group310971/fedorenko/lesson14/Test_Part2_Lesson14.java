@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson14;
+package by.it.group310971.fedorenko.lesson14;
 
 import by.it.HomeWork;
 import org.junit.Test;
@@ -62,7 +62,11 @@ public class Test_Part2_Lesson14 extends HomeWork {
         int n = 1 + random.nextInt(MAX_DISTANCE * 10);
         out.append(n);
         for (int i = 0; i < n; i++) {
-            int[] point = {random.nextInt(-diapason, diapason), random.nextInt(diapason), random.nextInt(diapason)};
+            int[] point = {
+                    random.nextInt(2 * diapason + 1) - diapason, // Диапазон от -diapason до diapason
+                    random.nextInt(diapason),                   // Диапазон от 0 до diapason - 1
+                    random.nextInt(diapason)                    // Диапазон от 0 до diapason - 1
+            };
             out.append('\n')
                     .append(point[0]).append(" ")
                     .append(point[1]).append(" ")
@@ -72,6 +76,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
         out.append('\n');
         return out.toString();
     }
+
 
     private String generateSiteInput(Set<String> sites) {
         var words = List.of("application java test hello world computer science course".split("\\s+"));

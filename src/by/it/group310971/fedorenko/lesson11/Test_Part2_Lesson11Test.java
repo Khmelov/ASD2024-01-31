@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson11;
+package by.it.group310971.fedorenko.lesson11;
 
 
 import by.it.HomeWork;
@@ -33,55 +33,52 @@ public class Test_Part2_Lesson11Test extends HomeWork {
 
     @Test(timeout = 5000)
     public void testTaskA() throws Exception {
-        String[] methods = """
-                size()
-                clear()
-                isEmpty()
-                add(Object)
-                remove(Object)
-                contains(Object)
-
-                """.split("\\s+");
+        String[] methods = new String[]{
+                "size()",
+                "clear()",
+                "isEmpty()",
+                "add(Object)",
+                "remove(Object)",
+                "contains(Object)"
+        };
         eObject = new HashSet<>();
         randomCheck("MyHashSet", methods);
     }
 
     @Test(timeout = 5000)
     public void testTaskB() throws Exception {
-        String[] methods = """
-                toString()
-                size()
-                clear()
-                isEmpty()
-                add(Object)
-                remove(Object)
-                contains(Object)
-                                
-                containsAll(Collection)
-                addAll(Collection)
-                removeAll(Collection)
-                retainAll(Collection)
-                """.split("\\s+");
+        String[] methods = new String[]{
+                "toString()",
+                "size()",
+                "clear()",
+                "isEmpty()",
+                "add(Object)",
+                "remove(Object)",
+                "contains(Object)",
+                "containsAll(Collection)",
+                "addAll(Collection)",
+                "removeAll(Collection)",
+                "retainAll(Collection)"
+        };
         eObject = new LinkedHashSet<>();
         randomCheck("MyLinkedHashSet", methods);
     }
 
     @Test(timeout = 5000)
     public void testTaskC() throws Exception {
-        String[] methods = """
-                toString()
-                size()
-                clear()
-                isEmpty()
-                add(Object)
-                remove(Object)
-                contains(Object)
-                                
-                containsAll(Collection)
-                addAll(Collection)
-                removeAll(Collection)
-                retainAll(Collection)
-                """.split("\\s+");
+        String[] methods = new String[]{
+                "toString()",
+                "size()",
+                "clear()",
+                "isEmpty()",
+                "add(Object)",
+                "remove(Object)",
+                "contains(Object)",
+                "containsAll(Collection)",
+                "addAll(Collection)",
+                "removeAll(Collection)",
+                "retainAll(Collection)"
+        };
         eObject = new TreeSet<>();
         randomCheck("MyTreeSet", methods);
     }
@@ -132,10 +129,10 @@ public class Test_Part2_Lesson11Test extends HomeWork {
             System.out.printf("\tStop. Size actual=%d expected=%d%n", aObject.size(), eObject.size());
             int eChecksum = checkSum(eString);
             int aChecksum = checkSum(aString);
-            assertEquals(("Erros state\n" +
-                          "expectred check sum=%d for %s\n" +
-                          "   actual check sum=%d for %s\n")
-                    .formatted(eChecksum, eString, aChecksum, aString), eChecksum, aChecksum);
+            assertEquals(String.format(
+                            "Errors state\nexpected check sum=%d for %s\n   actual check sum=%d for %s\n",
+                            eChecksum, eString, aChecksum, aString),
+                    eChecksum, aChecksum);
         }
         System.out.println("=".repeat(100) + "\nCOMPLETE: " + methodNames);
         System.out.println("expected: " + eObject);
@@ -212,8 +209,8 @@ public class Test_Part2_Lesson11Test extends HomeWork {
 
     private boolean notComparable(Method m) {
         return m.getReturnType() != Comparable.class &&
-               Arrays.stream(m.getParameterTypes())
-                       .noneMatch(p -> p == Comparable.class);
+                Arrays.stream(m.getParameterTypes())
+                        .noneMatch(p -> p == Comparable.class);
     }
 
     private String getSignature(Method method) {

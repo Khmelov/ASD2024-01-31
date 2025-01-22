@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson10;
+package by.it.group310971.fedorenko.lesson10;
 
 
 import by.it.HomeWork;
@@ -33,71 +33,63 @@ public class Test_Part2_Lesson10Test extends HomeWork {
 
     @Test(timeout = 5000)
     public void testTaskA() throws Exception {
-        String[] methods = """
-                toString()
-                size()
-                              
-                add(Object)
-                addFirst(Object)
-                addLast(Object)
-                                
-                element()
-                getFirst()
-                getLast()
-                                
-                poll()
-                pollFirst()
-                pollLast()
-                """.split("\\s+");
+        String[] methods = {
+                "toString()",
+                "size()",
+                "add(Object)",
+                "addFirst(Object)",
+                "addLast(Object)",
+                "element()",
+                "getFirst()",
+                "getLast()",
+                "poll()",
+                "pollFirst()",
+                "pollLast()"
+        };
         eObject = new ArrayDeque<>();
         randomCheck("MyArrayDeque", methods);
     }
 
     @Test(timeout = 5000)
     public void testTaskB() throws Exception {
-        String[] methods = """
-                toString()
-                add(Object)
-                remove(int)
-                remove(Object)
-                size()
-                                
-                addFirst(Object)
-                addLast(Object)
-                                
-                element()
-                getFirst()
-                getLast()
-                                
-                poll()
-                pollFirst()
-                pollLast()
-                """.split("\\s+");
+        String[] methods = {
+                "toString()",
+                "add(Object)",
+                "remove(int)",
+                "remove(Object)",
+                "size()",
+                "addFirst(Object)",
+                "addLast(Object)",
+                "element()",
+                "getFirst()",
+                "getLast()",
+                "poll()",
+                "pollFirst()",
+                "pollLast()"
+        };
         eObject = new LinkedList<>();
         randomCheck("MyLinkedList", methods);
     }
 
     @Test(timeout = 5000)
     public void testTaskC() throws Exception {
-        String[] methods = """
-                toString()
-                size()
-                clear()
-                add(Object)
-                remove()
-                contains(Object)
-                                
-                offer(Object)
-                poll()
-                peek()
-                element()
-                isEmpty()
-                                
-                containsAll(Collection)
-                addAll(Collection)
-                removeAll(Collection)
-                retainAll(Collection)
-                """.split("\\s+");
+        String[] methods = {
+                "toString()",
+                "size()",
+                "clear()",
+                "add(Object)",
+                "remove()",
+                "contains(Object)",
+                "offer(Object)",
+                "poll()",
+                "peek()",
+                "element()",
+                "isEmpty()",
+                "containsAll(Collection)",
+                "addAll(Collection)",
+                "removeAll(Collection)",
+                "retainAll(Collection)"
+        };
         eObject = new PriorityQueue<>();
         randomCheck("MyPriorityQueue", methods);
 
@@ -229,8 +221,8 @@ public class Test_Part2_Lesson10Test extends HomeWork {
 
     private boolean notComparable(Method m) {
         return m.getReturnType() != Comparable.class &&
-               Arrays.stream(m.getParameterTypes())
-                       .noneMatch(p -> p == Comparable.class);
+                Arrays.stream(m.getParameterTypes())
+                        .noneMatch(p -> p == Comparable.class);
     }
 
     private String getSignature(Method method) {
@@ -261,4 +253,5 @@ public class Test_Part2_Lesson10Test extends HomeWork {
                 .map(this::getSignature)
                 .collect(Collectors.joining("\n"));
     }
+
 }

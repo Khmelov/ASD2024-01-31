@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson12;
+package by.it.group310971.fedorenko.lesson12;
 
 
 import by.it.HomeWork;
@@ -33,67 +33,61 @@ public class Test_Part2_Lesson12Test extends HomeWork {
 
     @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
     public void testTaskA() throws Exception {
-        String[] methods = """
-                toString()
-                put(Object,Object)
-                remove(Object)
-                get(Object)
-                containsKey(Object)
-
-                size()
-                clear()
-                isEmpty()
-                """.split("\\s+");
+        String[] methods = (
+                "toString()\n" +
+                        "put(Object,Object)\n" +
+                        "remove(Object)\n" +
+                        "get(Object)\n" +
+                        "containsKey(Object)\n" +
+                        "size()\n" +
+                        "clear()\n" +
+                        "isEmpty()"
+        ).split("\\n+");
         eObject = new TreeMap<>();
         randomCheck("MyAvlMap", methods);
     }
 
     @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
     public void testTaskB() throws Exception {
-        String[] methods = """
-                toString()
-                put(Object,Object)
-                remove(Object)
-                get(Object)
-                containsKey(Object)
-                containsValue(Object)
-                                
-                size()
-                clear()
-                isEmpty()
-                                
-                headMap(Object)
-                tailMap(Object)
-                firstKey()
-                lastKey()
-                """.split("\\s+");
+        String[] methods = new String[] {
+                "toString()",
+                "put(Object,Object)",
+                "remove(Object)",
+                "get(Object)",
+                "containsKey(Object)",
+                "containsValue(Object)",
+                "size()",
+                "clear()",
+                "isEmpty()",
+                "headMap(Object)",
+                "tailMap(Object)",
+                "firstKey()",
+                "lastKey()"
+        };
         eObject = new TreeMap<>();
         randomCheck("MyRbMap", methods);
     }
 
     @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
     public void testTaskC() throws Exception {
-        String[] methods = """
-                put(Object,Object)
-                remove(Object)
-                get(Object)
-                containsKey(Object)
-                containsValue(Object)
-                                
-                size()
-                clear()
-                isEmpty()
-                                
-                headMap(Object)
-                tailMap(Object)
-                firstKey()
-                lastKey()
-                                
-                lowerKey(Object)
-                floorKey(Object)
-                ceilingKey(Object)
-                higherKey(Object)
-                """.split("\\s+");
+        String[] methods = new String[] {
+                "put(Object,Object)",
+                "remove(Object)",
+                "get(Object)",
+                "containsKey(Object)",
+                "containsValue(Object)",
+                "size()",
+                "clear()",
+                "isEmpty()",
+                "headMap(Object)",
+                "tailMap(Object)",
+                "firstKey()",
+                "lastKey()",
+                "lowerKey(Object)",
+                "floorKey(Object)",
+                "ceilingKey(Object)",
+                "higherKey(Object)"
+        };
         eObject = new TreeMap<>();
         randomCheck("MySplayMap", methods);
     }
@@ -149,10 +143,12 @@ public class Test_Part2_Lesson12Test extends HomeWork {
             System.out.printf("\tStop. Size actual=%d expected=%d%n", aObject.size(), eObject.size());
             int eChecksum = checkSum(eString);
             int aChecksum = checkSum(aString);
-            assertEquals(("Erros state\n" +
-                          "expectred check sum=%d for %s\n" +
-                          "   actual check sum=%d for %s\n")
-                    .formatted(eChecksum, eString, aChecksum, aString), eChecksum, aChecksum);
+            assertEquals(String.format(
+                    "Error state\n" +
+                            "expected check sum=%d for %s\n" +
+                            "   actual check sum=%d for %s\n",
+                    eChecksum, eString, aChecksum, aString), eChecksum, aChecksum);
+
         }
         System.out.println("=".repeat(100) + "\nCOMPLETE: " + methodNames);
         System.out.println("expected: " + eObject);
@@ -169,7 +165,7 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                         .collect(Collectors.toUnmodifiableSet());
                 parameters[i] = collect;
             } else if (String.class.isAssignableFrom(parameterTypes[i])
-                       || i == 1 //for put(Object,Object)
+                    || i == 1 //for put(Object,Object)
             ) {
                 parameters[i] = "str" + randomInteger();
             } else if (Integer.class.isAssignableFrom(parameterTypes[i])) {
@@ -215,12 +211,15 @@ public class Test_Part2_Lesson12Test extends HomeWork {
     }
 
     private void checkFieldAsCollection(Field field) {
+        if (field.getName().startsWith("this$")) {
+            return;
+        }
+
         Class<?> type = field.getType();
         if (Collection.class.isAssignableFrom(type) || Map.class.isAssignableFrom(type)) {
             fail("Incorrect field: " + field);
         }
     }
-
 
     private Map<String, Method> fill(Class<?> c, Set<String> methodNames) {
         return Stream.of(c.getMethods(), c.getDeclaredMethods())
@@ -243,8 +242,8 @@ public class Test_Part2_Lesson12Test extends HomeWork {
 
     private boolean notComparable(Method m) {
         return m.getReturnType() != Comparable.class &&
-               Arrays.stream(m.getParameterTypes())
-                       .noneMatch(p -> p == Comparable.class);
+                Arrays.stream(m.getParameterTypes())
+                        .noneMatch(p -> p == Comparable.class);
     }
 
     private String getSignature(Method method) {
