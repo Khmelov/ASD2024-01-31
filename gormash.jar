@@ -1,0 +1,3417 @@
+package by.it._310971_gormash.lesson09;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListA<E> implements List<E> {
+
+    //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    //////               Обязательные к реализации методы             ///////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    private Object[] elements; // Массив для хранения элементов
+    private int size; // Текущий размер списка
+
+    public ListA() {
+        elements = new Object[10]; // Начальный размер массива
+        size = 0;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[i]);
+            if (i < size - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public boolean add(E e) {
+        ensureCapacity(); // Убедитесь, что есть место для нового элемента
+        elements[size++] = e; // Добавьте элемент и увеличьте размер
+        return true;
+    }
+
+    private void ensureCapacity() {
+        if (size == elements.length) {
+            int newSize = elements.length * 2; // Увеличивает размер массива вдвое
+            Object[] newElements = new Object[newSize];
+            System.arraycopy(elements, 0, newElements, 0, size);
+            elements = newElements; // Обновляет массив
+        }
+    }
+
+    @Override
+    public E remove(int index) {
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        E oldValue = (E) elements[index];
+        int numMoved = size - index - 1;
+        if (numMoved > 0) System.arraycopy(elements, index + 1, elements, index, numMoved);
+        elements[--size] = null; // Удалите ссылку на удаляемый элемент
+        return oldValue;
+    }
+
+    @Override
+    public int size() {
+        return size; // Возвращает текущий размер списка
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    //////               Опциональные к реализации методы             ///////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void add(int index, E element) {
+
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public E set(int index, E element) {
+        return null;
+    }
+
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public E get(int index) {
+        return null;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return false;
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return null;
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        return null;
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
+        return null;
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    ////////        Эти методы имплементировать необязательно    ////////////
+    ////////        но они будут нужны для корректной отладки    ////////////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+
+
+}
+
+
+package by.it._310971_gormash.lesson09;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListB<E> implements List<E> {
+
+
+    //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    //////               Обязательные к реализации методы             ///////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    private Object[] elements; // Массив для хранения элементов
+    private int size; // Текущий размер списка
+
+    public ListB() {
+        elements = new Object[10]; // Начальный размер массива
+        size = 0;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[i]);
+            if (i < size - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public boolean add(E e) {
+        if (size == elements.length) {
+            resize(); // Увеличиваем размер массива, если он заполнен
+        }
+        elements[size++] = e; // Добавляем элемент и увеличиваем размер
+        return true;
+    }
+
+    @Override
+    public E remove(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        E removedElement = (E) elements[index];
+        // Сдвигаем элементы влево
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        elements[--size] = null; // Уменьшаем размер и очищаем последний элемент
+        return removedElement;
+    }
+
+    @Override
+    public int size() {
+        return size; // Возвращаем текущий размер списка
+    }
+
+    @Override
+    public void add(int index, E element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        if (size == elements.length) {
+            resize(); // Увеличиваем размер массива, если он заполнен
+        }
+        System.arraycopy(elements, index, elements, index + 1, size - index); // Сдвигаем элементы вправо
+        elements[index] = element; // Вставляем новый элемент
+        size++;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (o.equals(elements[i])) {
+                remove(i); // Удаляем элемент по индексу
+                return true;
+            }
+        }
+        return false; // Элемент не найден
+    }
+
+    @Override
+    public E set(int index, E element) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        E oldElement = (E) elements[index];
+        elements[index] = element; // Заменяем элемент
+        return oldElement; // Возвращаем старый элемент
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0; // Проверяем, пустой ли список
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < size; i++) {
+            elements[i] = null; // Очищаем массив
+        }
+        size = 0; // Устанавливаем размер в 0
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (o.equals(elements[i])) {
+                return i; // Возвращаем индекс элемента
+            }
+        }
+        return -1; // Элемент не найден
+    }
+
+    @Override
+    public E get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return (E) elements[index]; // Возвращаем элемент по индексу
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return indexOf(o) >= 0; // Проверяем, содержится ли элемент в списке
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        for (int i = size - 1; i >= 0; i--) {
+            if (o.equals(elements[i])) {
+                return i; // Возвращаем последний индекс элемента
+            }
+        }
+        return -1; // Элемент не найден
+    }
+
+    private void resize() {
+        Object[] newArray = new Object[elements.length * 2]; // Увеличиваем размер массива вдвое
+        System.arraycopy(elements, 0, newArray, 0, size); // Копируем старые элементы
+        elements = newArray; // Устанавливаем новый массив
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    //////               Опциональные к реализации методы             ///////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return null;
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        return null;
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
+        return null;
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    ////////        Эти методы имплементировать необязательно    ////////////
+    ////////        но они будут нужны для корректной отладки    ////////////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+}
+
+
+
+package by.it._310971_gormash.lesson09;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListC<E> implements List<E> {
+
+    //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    //////               Обязательные к реализации методы             ///////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    private Object[] elements; // Массив для хранения элементов
+    private int size; // Текущий размер списка
+
+    public ListC() {
+        elements = new Object[10]; // Начальный размер массива
+        size = 0;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[i]);
+            if (i < size - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public boolean add(E e) {
+        if (size == elements.length) {
+            resize(); // Увеличиваем размер массива, если он заполнен
+        }
+        elements[size++] = e; // Добавляем элемент и увеличиваем размер
+        return true;
+    }
+
+    @Override
+    public E remove(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        E oldValue = (E) elements[index];
+        // Сдвигаем элементы влево
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        elements[--size] = null; // Уменьшаем размер и очищаем последний элемент
+        return oldValue;
+    }
+
+    @Override
+    public int size() {
+        return size; // Возвращаем текущий размер списка
+    }
+
+    @Override
+    public void add(int index, E element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        if (size == elements.length) {
+            resize(); // Увеличиваем размер массива, если он заполнен
+        }
+        System.arraycopy(elements, index, elements, index + 1, size - index); // Сдвигаем элементы вправо
+        elements[index] = element; // Вставляем новый элемент
+        size++;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (o.equals(elements[i])) {
+                remove(i); // Удаляем элемент по индексу
+                return true;
+            }
+        }
+        return false; // Элемент не найден
+    }
+
+    @Override
+    public E set(int index, E element) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        E oldValue = (E) elements[index];
+        elements[index] = element; // Заменяем элемент
+        return oldValue; // Возвращаем старое значение
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0; // Проверяем, пуст ли список
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < size; i++) {
+            elements[i] = null; // Очищаем массив
+        }
+        size = 0; // Устанавливаем размер в 0
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (o.equals(elements[i])) {
+                return i; // Возвращаем индекс элемента
+            }
+        }
+        return -1; // Элемент не найден
+    }
+
+    @Override
+    public E get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return (E) elements[index]; // Возвращаем элемент по индексу
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return indexOf(o) >= 0; // Проверяем, содержится ли элемент в списке
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        for (int i = size - 1; i >= 0; i--) {
+            if (o.equals(elements[i])) {
+                return i; // Возвращаем последний индекс элемента
+            }
+        }
+        return -1; // Элемент не найден
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        for (Object o : c) {
+            if (!contains(o)) {
+                return false; // Если хотя бы один элемент не найден, возвращаем false
+            }
+        }
+        return true; // Все элементы найдены
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        boolean modified = false;
+        for (E e : c) {
+            if (add(e)) {
+                modified = true; // Если хотя бы один элемент добавлен, устанавливаем modified в true
+            }
+        }
+        return modified; // Возвращаем результат
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        boolean modified = false;
+        for (E e : c) {
+            add(index++, e); // Добавляем элементы по индексу
+            modified = true; // Устанавливаем modified в true
+        }
+        return modified; // Возвращаем результат
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean modified = false;
+        for (Object o : c) {
+            while (remove(o)) {
+                modified = true; // Если элемент был удален, устанавливаем modified в true
+            }
+        }
+        return modified; // Возвращаем результат
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean modified = false;
+        for (int i = 0; i < size; i++) {
+            if (!c.contains(elements[i])) {
+                remove(i--); // Удаляем элемент, если он не содержится в коллекции
+                modified = true; // Устанавливаем modified в true
+            }
+        }
+        return modified; // Возвращаем результат
+    }
+
+    private void resize() {
+        Object[] newArray = new Object[elements.length * 2]; // Увеличиваем размер массива вдвое
+        System.arraycopy(elements, 0, newArray, 0, size); // Копируем старые элементы в новый массив
+        elements = newArray; // Обновляем ссылку на массив
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    //////               Опциональные к реализации методы             ///////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return null;
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        return null;
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
+        return null;
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    ////////        Эти методы имплементировать необязательно    ////////////
+    ////////        но они будут нужны для корректной отладки    ////////////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+}
+
+
+
+package by.it._310971_gormash.lesson10;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException; // Для обработки исключения при отсутствии элементов
+import java.util.Deque; // Для реализации интерфейса Deque
+
+public class MyArrayDeque<E> implements Deque<E> {
+    private E[] elements;
+    private int size;
+    private int front;
+    private int rear;
+
+    // Конструктор по умолчанию
+    @SuppressWarnings("unchecked")
+    public MyArrayDeque() {
+        this(10); // Устанавливаем начальную емкость по умолчанию
+    }
+
+    @SuppressWarnings("unchecked")
+    public MyArrayDeque(int capacity) {
+        elements = (E[]) new Object[capacity];
+        size = 0;
+        front = 0;
+        rear = 0;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[(front + i) % elements.length]);
+            if (i < size - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean add(E element) {
+        if (size == elements.length) resize();
+        addLast(element);
+        return true; // Возвращаем true после успешного добавления элемента
+    }
+
+    @Override
+    public void addFirst(E element) {
+        if (size == elements.length) resize();
+        front = (front - 1 + elements.length) % elements.length;
+        elements[front] = element;
+        size++;
+    }
+
+    @Override
+    public void addLast(E element) {
+        if (size == elements.length) resize();
+        elements[rear] = element;
+        rear = (rear + 1) % elements.length;
+        size++;
+    }
+
+    @Override
+    public E element() {
+        if (size == 0) throw new NoSuchElementException();
+        return elements[front];
+    }
+
+    @Override
+    public E getFirst() {
+        return element();
+    }
+
+    @Override
+    public E getLast() {
+        if (size == 0) throw new NoSuchElementException();
+        return elements[(rear - 1 + elements.length) % elements.length];
+    }
+    
+    @Override
+    public E poll() {
+        return pollFirst();
+    }
+
+    @Override
+    public E pollFirst() {
+        if (size == 0) return null;
+        E element = elements[front];
+        front = (front + 1) % elements.length;
+        size--;
+        return element;
+    }
+
+    @Override
+    public E pollLast() {
+        if (size == 0) return null;
+        rear = (rear - 1 + elements.length) % elements.length;
+        E element = elements[rear];
+        size--;
+        return element;
+    }
+
+    private void resize() {
+        int newCapacity = elements.length * 2;
+        E[] newArray = (E[]) new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newArray[i] = elements[(front + i) % elements.length];
+        }
+        elements = newArray;
+        front = 0;
+        rear = size;
+    }
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
+    public Iterator<E> descendingIterator() {
+        return null;
+    }
+    @Override
+    public boolean offer(E e) {
+        return false;
+    }
+
+    @Override
+    public E remove() {
+        return null;
+    }
+    @Override
+    public boolean offerFirst(E e) {
+        return false;
+    }
+
+    @Override
+    public boolean offerLast(E e) {
+        return false;
+    }
+
+    @Override
+    public E removeFirst() {
+        return null;
+    }
+
+    @Override
+    public E removeLast() {
+        return null;
+    }
+    @Override
+    public E peek() {
+        return null;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public void push(E e) {
+
+    }
+
+    @Override
+    public E pop() {
+        return null;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return false;
+    }
+    @Override
+    public E peekFirst() {
+        return null;
+    }
+
+    @Override
+    public E peekLast() {
+        return null;
+    }
+
+    @Override
+    public boolean removeFirstOccurrence(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean removeLastOccurrence(Object o) {
+        return false;
+    }
+}
+
+
+
+package by.it._310971_gormash.lesson10;
+
+import java.util.*;
+
+public class MyLinkedList<E> implements List<E>{
+    private Node<E> head;
+    private Node<E> tail;
+    private int size;
+
+    public MyLinkedList() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    private static class Node<E> {
+        E data;
+        Node<E> next;
+        Node<E> prev;
+
+        Node(E data) {
+            this.data = data;
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        Node<E> current = head;
+        while (current != null) {
+            sb.append(current.data);
+            current = current.next;
+            if (current != null) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isEmpty'");
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'contains'");
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+    }
+
+    @Override
+    public Object[] toArray() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+    }
+
+    @Override
+    public boolean add(E e) {
+        try {
+            Node<E> newNode = new Node<>(e);
+            if (tail == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                newNode.prev = tail;
+                tail = newNode;
+            }
+            size++;
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        Node<E> current = head;
+        while (current != null) {
+            if (current.data.equals(o)) {
+                if (current.prev != null) {
+                    current.prev.next = current.next;
+                } else {
+                    head = current.next; // Удаляемый элемент был головой
+                }
+                if (current.next != null) {
+                    current.next.prev = current.prev;
+                } else {
+                    tail = current.prev; // Удаляемый элемент был хвостом
+                }
+                size--;
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    public void addFirst(E element) {
+        Node<E> newNode = new Node<>(element);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        }
+        size++;
+    }
+
+    public void addLast(E element) {
+        Node<E> newNode = new Node<>(element);
+        if (tail == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        size++;
+    }
+
+    public E element() {
+        return getFirst();
+    }
+
+    public E getFirst() {
+        if (head == null) {
+            throw new NoSuchElementException("List is empty");
+        }
+        return head.data;
+    }
+
+    public E getLast() {
+        if (tail == null) {
+            throw new NoSuchElementException("List is empty");
+        }
+        return tail.data;
+    }
+
+    public E poll() {
+        return pollFirst();
+    }
+
+    public E pollFirst() {
+        if (head == null) {
+            return null;
+        }
+        E data = head.data;
+        head = head.next;
+        if (head != null) {
+            head.prev = null;
+        } else {
+            tail = null; // Список стал пустым
+        }
+        size--;
+        return data;
+    }
+
+    public E pollLast() {
+        if (tail == null) {
+            return null;
+        }
+        E data = tail.data;
+        tail = tail.prev;
+        if (tail != null) {
+            tail.next = null;
+        } else {
+            head = null; // Список стал пустым
+        }
+        size--;
+        return data;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'containsAll'");
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'retainAll'");
+    }
+
+    @Override
+    public void clear() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'clear'");
+    }
+
+    @Override
+    public E get(int index) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'get'");
+    }
+
+    @Override
+    public E set(int index, E element) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'set'");
+    }
+
+    @Override
+    public void add(int index, E element) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'add'");
+    }
+
+    @Override
+    public E remove(int index) {
+        if (index < 0 || index > size - 1)
+            throw new IndexOutOfBoundsException();
+        Node<E> node = head;
+        for (int i = 0; i < index; i++)
+            node = node.next;
+
+        if (node.prev != null) {
+            node.prev.next = node.next;
+        } else {
+            head = node.next; // Удаляемый элемент был головой
+        }
+        if (node.next != null) {
+            node.next.prev = node.prev;
+        } else {
+            tail = node.prev; // Удаляемый элемент был хвостом
+        }
+        size--;
+        return node.data;
+    }
+
+
+    @Override
+    public int indexOf(Object o) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'indexOf'");
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'lastIndexOf'");
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
+    }
+
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
+    }
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'subList'");
+    }
+
+}
+
+
+
+package by.it._310971_gormash.lesson10;
+
+import java.util.*;
+
+public class MyPriorityQueue<E> implements Queue<E> {
+    private int size = 0;
+    @SuppressWarnings("unchecked")
+    private E[] heap = (E[]) new Object[0];
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size==0;
+    }
+
+    @Override
+    public boolean contains(Object element) {
+            for (int i = 0; i < size; i++)
+                if (heap[i].equals(element))
+                    return true;
+        return false;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
+    public boolean add(E element) {
+        return offer(element);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        for (Object element : c) {
+            if (!contains(element)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        @SuppressWarnings("unchecked")
+        E []cArray =(E[]) c.toArray();
+        if(cArray.length == 0)
+            return false;
+        for(int i = 0; i < cArray.length; i++)
+            offer(cArray[i]);
+        return true;
+    }
+
+    public void heapify(){
+        for(int i = size/2-1;i>=0;i--)
+            heapifyDown(i);
+    }
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        int i = 0;
+        for(;i<size && !c.contains(heap[i]);i++);
+        if(i==size)
+            return false;
+        int end = size;
+        int begin = i;
+        int[] forSaving = new int[end-begin];
+        for(i = begin+1; i<end;i++)
+            forSaving[i-begin] = (c.contains(heap[i]))?0:1;
+        int w = begin;
+        for(i = begin; i < end; i++)
+            if(forSaving[i-begin]==1)
+                heap[w++]=heap[i];
+        size = w;
+        for(i = size; i < end; i++)
+            heap[i]=null;
+        heapify();
+        return true;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        int i = 0;
+        for(;i<size && c.contains(heap[i]);i++);
+        if(i==size)
+            return false;
+        int end = size;
+        int begin = i;
+        int[] forSaving = new int[end-begin];
+        for(i = begin+1; i<end;i++)
+            forSaving[i-begin] = (!c.contains(heap[i]))?0:1;
+        int w = begin;
+        for(i = begin; i < end; i++)
+            if(forSaving[i-begin]==1)
+                heap[w++]=heap[i];
+        size = w;
+        for(i = size; i < end; i++)
+            heap[i]=null;
+        heapify();
+        return true;
+    }
+
+    @Override
+    public void clear() {
+        for(int i = 0; i < size; i++)
+            heap[i]=null;
+        size = 0;
+    }
+
+    @Override
+    public boolean offer(E element) {
+        if(size == heap.length){
+            @SuppressWarnings("unchecked")
+            E []temp = (E[])new Object[size*3/2+1];
+            System.arraycopy(heap, 0, temp, 0, size);
+            heap = temp;
+        }
+        heap[size]=element;
+        heapifyUp(size);
+        size++;
+        return true;
+    }
+
+    @Override
+    public E remove() {
+        if(isEmpty())
+            throw new IllegalStateException("Queue is empty");
+        return poll();
+    }
+
+    private void swap(int i, int j){
+        E temp = heap[i];
+        heap[i]=heap[j];
+        heap[j]=temp;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void heapifyUp(int index){
+        while(((Comparable<? super E>) heap[index]).compareTo(heap[(index-1)/2])<0){
+            swap(index, (index-1)/2);
+            index = (index-1)/2;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void heapifyDown(int index){
+        boolean isinplace = false;
+        while(2*index+1<size && !isinplace){
+            int left = 2*index+1;
+            int right = left+1;
+            int child = left;
+            if(right < size && ((Comparable<? super E>) heap[right]).compareTo(heap[left])<0)
+                child = right;
+            if(((Comparable<? super E>) heap[index]).compareTo(heap[child])<0)
+                isinplace = true;
+            if (!isinplace)
+                swap(index, child);
+            index = child;
+        }
+    }
+    @Override
+    public E poll() {
+        if(size == 0)
+            return null;
+        E element = heap[0];
+        heap[0] = heap[size-1];
+        heap[--size] = null;
+        heapifyDown(0);
+        return element;
+    }
+
+    @Override
+    public E element() {
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty");
+        }
+        return heap[0];
+    }
+
+    @Override
+    public E peek() {
+        return isEmpty() ? null : heap[0];
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        for(int i = 0; i < size; i++){
+            sb.append(heap[i]);
+            if(i < size-1){
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+}
+
+
+
+
+package by.it._310971_gormash.lesson11;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+
+public class MyHashSet<E> implements Set<E> {
+    private static final int INITIAL_CAPACITY = 16;
+    private Node<E>[] table;
+    private int size;
+
+    public MyHashSet() {
+        table = new Node[INITIAL_CAPACITY];
+        size = 0;
+    }
+
+    private static class Node<E> {
+        E value;
+        Node<E> next;
+
+        Node(E value) {
+            this.value = value;
+        }
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void clear() {
+        table = new Node[INITIAL_CAPACITY];
+        size = 0;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public boolean add(E value) {
+        int index = getIndex(value);
+        if (contains(value)) {
+            return false; // элемент уже существует
+        }
+        Node<E> newNode = new Node<>(value);
+        newNode.next = table[index];
+        table[index] = newNode;
+        size++;
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object value) { // Изменено на Object
+        int index = getIndex(value);
+        Node<E> current = table[index];
+        Node<E> previous = null;
+
+        while (current != null) {
+            if (current.value.equals(value)) {
+                if (previous == null) {
+                    table[index] = current.next; // удаляем первый элемент
+                } else {
+                    previous.next = current.next; // удаляем элемент из середины или конца
+                }
+                size--;
+                return true;
+            }
+            previous = current;
+            current = current.next;
+        }
+        return false; // элемент не найден
+    }
+
+    @Override
+    public boolean contains(Object value) { // Изменено на Object
+        int index = getIndex(value);
+        Node<E> current = table[index];
+        while (current != null) {
+            if (current.value.equals(value)) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    private int getIndex(Object value) {
+        return Objects.hashCode(value) % table.length;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (Node<E> node : table) {
+            Node<E> current = node;
+            while (current != null) {
+                sb.append(current.value).append(", ");
+                current = current.next;
+            }
+        }
+        if (sb.length() > 1) {
+            sb.setLength(sb.length() - 2); // удаляем последнюю запятую и пробел
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+}
+
+
+
+package by.it._310971_gormash.lesson11;
+
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Collection;
+
+public class MyLinkedHashSet<E> implements Set<E> {
+    private static final int INITIAL_CAPACITY = 16; // Начальная емкость
+    private Node<E>[] table; // Массив для хранения элементов
+    private int size; // Количество элементов в наборе
+    private Node<E> head; // Голова связного списка для порядка добавления
+    private Node<E> tail; // Хвост связного списка для порядка добавления
+
+    // Внутренний класс для узлов связного списка
+    private static class Node<E> {
+        E value;
+        Node<E> next; // Ссылка на следующий узел
+        Node<E> prev; // Ссылка на предыдущий узел
+
+        Node(E value) {
+            this.value = value;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public MyLinkedHashSet() {
+        table = new Node[INITIAL_CAPACITY];
+        size = 0;
+        head = null;
+        tail = null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node<E> current = head;
+        while (current != null) {
+            sb.append(current.value);
+            current = current.next;
+            if (current != null) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void clear() {
+        table = new Node[INITIAL_CAPACITY];
+        size = 0;
+        head = null;
+        tail = null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public boolean add(E value) {
+        int index = getIndex(value);
+        if (contains(value)) {
+            return false; // Элемент уже существует
+        }
+        Node<E> newNode = new Node<>(value);
+        // Добавление в массив
+        if (table[index] == null) {
+            table[index] = newNode;
+        } else {
+            Node<E> current = table[index];
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode; // Добавление в конец списка
+        }
+        // Добавление в связный список
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        size++;
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object value) {
+        int index = getIndex(value);
+        Node<E> current = table[index];
+        Node<E> prev = null;
+
+        while (current != null) {
+            if (current.value.equals(value)) {
+                if (prev == null) {
+                    table[index] = current.next; // Удаление первого узла
+                } else {
+                    prev.next = current.next; // Удаление узла из списка
+                }
+                // Удаление из связного списка
+                if (current.prev != null) {
+                    current.prev.next = current.next;
+                } else {
+                    head = current.next; // Если удаляем голову
+                }
+                if (current.next != null) {
+                    current.next.prev = current.prev;
+                } else {
+                    tail = current.prev; // Если удаляем хвост
+                }
+                size--;
+                return true;
+            }
+            prev = current;
+            current = current.next;
+        }
+        return false; // Элемент не найден
+    }
+
+    @Override
+    public boolean contains(Object value) {
+        int index = getIndex(value);
+        Node<E> current = table[index];
+        while (current != null) {
+            if (current.value.equals(value)) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> collection) {
+        for (Object value : collection) {
+            if (!contains(value)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> collection) {
+        boolean modified = false;
+        for (E value : collection) {
+            if (add(value)) {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> collection) {
+        boolean modified = false;
+        for (Object value : collection) {
+            if (remove(value)) {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> collection) {
+        boolean modified = false;
+        Node<E> current = head;
+        while (current != null) {
+            if (!collection.contains(current.value)) {
+                remove(current.value);
+                modified = true;
+            }
+            current = current.next;
+        }
+        return modified;
+    }
+
+    private int getIndex(Object value) {
+        return value == null ? 0 : Math.abs(value.hashCode() % table.length);
+    }
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+}
+
+
+
+package by.it._310971_gormash.lesson11;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+
+public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
+    private E[] elements;
+    private int size;
+
+    @SuppressWarnings("unchecked")
+    public MyTreeSet() {
+        elements = (E[]) new Comparable[10]; // Начальный размер массива
+        size = 0;
+    }
+
+    @Override
+    public String toString() {
+        if (size == 0) return "[]";
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[i]);
+            if (i < size - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void clear() {
+        elements = (E[]) new Comparable[10]; // Сброс массива
+        size = 0;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public boolean add(E element) {
+        if (contains(element)) return false; // Элемент уже существует
+        if (size == elements.length) resize(); // Увеличение массива при необходимости
+        int index = Arrays.binarySearch(elements, 0, size, element);
+        index = index < 0 ? -index - 1 : index; // Получаем индекс для вставки
+        System.arraycopy(elements, index, elements, index + 1, size - index); // Сдвиг элементов
+        elements[index] = element; // Вставка элемента
+        size++;
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object element) {
+        int index = Arrays.binarySearch(elements, 0, size, (E) element);
+        if (index < 0) return false; // Элемент не найден
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1); // Сдвиг элементов
+        size--;
+        return true;
+    }
+
+    @Override
+    public boolean contains(Object element) {
+        return Arrays.binarySearch(elements, 0, size, (E) element) >= 0; // Поиск элемента
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> collection) {
+        for (Object element : collection) {
+            if (!contains(element)) return false; // Проверка каждого элемента
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> collection) {
+        boolean modified = false;
+        for (E element : collection) {
+            if (add(element)) modified = true; // Добавление элементов
+        }
+        return modified;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> collection) {
+        boolean modified = false;
+        for (Object element : collection) {
+            if (remove(element)) modified = true; // Удаление элементов
+        }
+        return modified;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> collection) {
+        boolean modified = false;
+        for (int i = 0; i < size; i++) {
+            if (!collection.contains(elements[i])) {
+                remove(elements[i]); // Удаление элементов, не входящих в коллекцию
+                modified = true;
+                i--; // Корректировка индекса после удаления
+            }
+        }
+        return modified;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void resize() {
+        elements = Arrays.copyOf(elements, elements.length * 2); // Увеличение размера массива
+    }
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+}
+
+
+package by.it._310971_gormash.lesson12;
+
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
+public class MyAvlMap implements Map<Integer, String> {
+
+    private static class Node {
+        Integer key;
+        String value;
+        Node left;
+        Node right;
+        int height;
+
+        Node(Integer key, String value) {
+            this.key = key;
+            this.value = value;
+            this.height = 1;
+        }
+    }
+
+    private Node root;
+    private int size;
+
+    public MyAvlMap() {
+        root = null;
+        size = 0;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return get(key) != null;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return containsValue(root, value);
+    }
+
+    private boolean containsValue(Node node, Object value) {
+        if (node == null) return false;
+        if (Objects.equals(node.value, value)) return true;
+        return containsValue(node.left, value) || containsValue(node.right, value);
+    }
+
+    @Override
+    public String get(Object key) {
+        Node node = get(root, (Integer) key);
+        return node == null ? null : node.value;
+    }
+
+    private Node get(Node node, Integer key) {
+        if (node == null) return null;
+        if (key.compareTo(node.key) < 0) return get(node.left, key);
+        else if (key.compareTo(node.key) > 0) return get(node.right, key);
+        else return node;
+    }
+
+    @Override
+    public String put(Integer key, String value) {
+        Node node = get(root, key);
+        if (node != null) {
+            String oldValue = node.value;
+            node.value = value;
+            return oldValue;
+        } else {
+            root = insert(root, key, value);
+            size++;
+            return null;
+        }
+    }
+
+    @Override
+    public String remove(Object key) {
+        String value = get(key);
+        if (value != null) {
+            root = delete(root, (Integer) key);
+            size--;
+        }
+        return value;
+    }
+
+    @Override
+    public void clear() {
+        root = null;
+        size = 0;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        toString(root, sb);
+        if (sb.length() > 1) {
+            sb.setLength(sb.length() - 2); // Удаляем последнюю запятую и пробел
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+    private void toString(Node node, StringBuilder sb) {
+        if (node != null) {
+            toString(node.left, sb);
+            sb.append(node.key).append("=").append(node.value).append(", ");
+            toString(node.right, sb);
+        }
+    }
+
+    // Вспомогательные методы для АВЛ-дерева
+
+    private int height(Node node) {
+        return node == null ? 0 : node.height;
+    }
+
+    private int balanceFactor(Node node) {
+        return node == null ? 0 : height(node.left) - height(node.right);
+    }
+
+    private Node rotateRight(Node y) {
+        Node x = y.left;
+        Node T2 = x.right;
+
+        x.right = y;
+        y.left = T2;
+
+        y.height = Math.max(height(y.left), height(y.right)) + 1;
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
+
+        return x;
+    }
+
+    private Node rotateLeft(Node x) {
+        Node y = x.right;
+        Node T2 = y.left;
+
+        y.left = x;
+        x.right = T2;
+
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
+        y.height = Math.max(height(y.left), height(y.right)) + 1;
+
+        return y;
+    }
+
+    private Node insert(Node node, Integer key, String value) {
+        if (node == null) return new Node(key, value);
+
+        if (key.compareTo(node.key) < 0) {
+            node.left = insert(node.left, key, value);
+        } else if (key.compareTo(node.key) > 0) {
+            node.right = insert(node.right, key, value);
+        } else {
+            node.value = value;
+            return node;
+        }
+
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+
+        int balance = balanceFactor(node);
+
+        // Левый левый случай
+        if (balance > 1 && key.compareTo(node.left.key) < 0) {
+            return rotateRight(node);
+        }
+
+        // Правый правый случай
+        if (balance < -1 && key.compareTo(node.right.key) > 0) {
+            return rotateLeft(node);
+        }
+
+        // Левый правый случай
+        if (balance > 1 && key.compareTo(node.left.key) > 0) {
+            node.left = rotateLeft(node.left);
+            return rotateRight(node);
+        }
+
+        // Правый левый случай
+        if (balance < -1 && key.compareTo(node.right.key) < 0) {
+            node.right = rotateRight(node.right);
+            return rotateLeft(node);
+        }
+
+        return node;
+    }
+
+    private Node delete(Node node, Integer key) {
+        if (node == null) return null;
+
+        if (key.compareTo(node.key) < 0) {
+            node.left = delete(node.left, key);
+        } else if (key.compareTo(node.key) > 0) {
+            node.right = delete(node.right, key);
+        } else {
+            if (node.left == null || node.right == null) {
+                node = (node.left == null) ? node.right : node.left;
+            } else {
+                Node temp = minValueNode(node.right);
+                node.key = temp.key;
+                node.value = temp.value;
+                node.right = delete(node.right, temp.key);
+            }
+        }
+
+        if (node == null) return null;
+
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+
+        int balance = balanceFactor(node);
+
+        // Левый левый случай
+        if (balance > 1 && balanceFactor(node.left) >= 0) {
+            return rotateRight(node);
+        }
+
+        // Левый правый случай
+        if (balance > 1 && balanceFactor(node.left) < 0) {
+            node.left = rotateLeft(node.left);
+            return rotateRight(node);
+        }
+
+        // Правый правый случай
+        if (balance < -1 && balanceFactor(node.right) <= 0) {
+            return rotateLeft(node);
+        }
+
+        // Правый левый случай
+        if (balance < -1 && balanceFactor(node.right) > 0) {
+            node.right = rotateRight(node.right);
+            return rotateLeft(node);
+        }
+
+        return node;
+    }
+
+    private Node minValueNode(Node node) {
+        Node current = node;
+        while (current.left != null) {
+            current = current.left;
+        }
+        return current;
+    }
+
+    // Остальные методы интерфейса Map не реализованы
+    @Override
+    public void putAll(Map<? extends Integer, ? extends String> m) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public java.util.Set<Integer> keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public java.util.Collection<String> values() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public java.util.Set<Entry<Integer, String>> entrySet() {
+        throw new UnsupportedOperationException();
+    }
+}
+
+
+
+package by.it._310971_gormash.lesson12;
+
+import java.util.*;
+
+public class MyRbMap implements SortedMap<Integer, String> {
+
+    private enum COLOR{RED, BLACK};
+
+    private static class Node {
+        Integer key;
+        String value;
+        COLOR color;
+        Node left, right;
+        public Node(Integer key, String value, COLOR color) {
+            this.key = key;
+            this.value = value;
+            this.color = color;
+            this.left = this.right = null;
+        }
+    }
+
+    int _size = 0;
+    Node head = null;
+
+    private boolean isRed(Node n) {
+        return n != null && n.color == COLOR.RED;
+    }
+
+    private void swapColors(Node n) {
+        COLOR tmp = n.left.color;
+        n.left.color = n.color;
+        n.right.color = n.color;
+        n.color = tmp;
+    }
+    private Node leftRotate(Node n) {
+        Node child = n.right;
+        n.right = child.left;
+        child.left = n;
+        child.color = n.color;
+        n.color = COLOR.RED;
+        return child;
+    }
+
+    private Node rightRotate(Node n) {
+        Node child = n.left;
+        n.left = child.right;
+        child.right = n;
+        child.color = n.color;
+        n.color = COLOR.RED;
+        return child;
+    }
+
+    private Node balanceNode(Node n) {
+        if (isRed(n.right) && !isRed(n.left)) {
+            n = leftRotate(n);
+        }
+        if (isRed(n.left) && isRed(n.left.left)) {
+            n = rightRotate(n);
+        }
+        if (isRed(n.right) && isRed(n.left)) {
+            swapColors(n);
+        }
+
+        return n;
+    }
+
+
+    private Node search(Node n, Integer key) {
+        while(n != null) {
+            if ((int)key < (int)n.key) {
+                n = n.left;
+            } else if ((int)key > (int)n.key) {
+                n = n.right;
+            } else {
+                return n;
+            }
+        }
+
+        return null;
+    }
+
+    private Node put(Node n, Integer key, String value) {
+        if (n == null) {
+            return new Node(key, value, COLOR.RED);
+        }
+
+        if ((int)key < (int)n.key) {
+            n.left = put(n.left, key, value);
+        } else if ((int)key > (int)n.key) {
+            n.right = put(n.right, key, value);
+        }
+
+        return balanceNode(n);
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        String delimiter = "";
+        Stack<Node> s = new Stack<Node>();
+        Node curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                curNode = curNode.left;
+            } else {
+                curNode = s.pop();
+                sb.append(delimiter).append(curNode.key).append("=").append(curNode.value);
+                delimiter = ", ";
+                curNode = curNode.right;
+            }
+        }
+
+        sb.append("}");
+        return sb.toString();
+    }
+
+    @Override
+    public Comparator<? super Integer> comparator() {
+        return null;
+    }
+
+    @Override
+    public SortedMap<Integer, String> subMap(Integer fromKey, Integer toKey) {
+        return null;
+    }
+
+    private void headToKey(SortedMap<Integer, String> newMap, Integer toKey, Node n) {
+        if (n == null) {
+            return;
+        }
+
+        headToKey(newMap, toKey, n.left);
+        if (toKey > n.key) {
+            newMap.put(n.key, n.value);
+            headToKey(newMap, toKey, n.right);
+        }
+    }
+
+    private void tailFromKey(SortedMap<Integer, String> newMap, Integer fromKey, Node n) {
+        if (n == null) {
+            return;
+        }
+
+        tailFromKey(newMap, fromKey, n.right);
+        if (fromKey <= n.key) {
+            newMap.put(n.key, n.value);
+            tailFromKey(newMap, fromKey, n.left);
+        }
+    }
+
+    @Override
+    public SortedMap<Integer, String> headMap(Integer toKey) {
+        SortedMap<Integer, String> newMap = new MyRbMap();
+        headToKey(newMap, toKey, head);
+        return newMap;
+    }
+
+    @Override
+    public SortedMap<Integer, String> tailMap(Integer fromKey) {
+        SortedMap<Integer, String> newMap = new MyRbMap();
+        tailFromKey(newMap, fromKey, head);
+        return newMap;
+    }
+
+    @Override
+    public Integer firstKey() {
+        if (head == null) {
+            return null;
+        }
+
+        Node n = head;
+        while (n.left != null) {
+            n = n.left;
+        }
+
+        return n.key;
+    }
+
+    @Override
+    public Integer lastKey() {
+        if (head == null) {
+            return null;
+        }
+
+        Node n = head;
+        while (n.right != null) {
+            n = n.right;
+        }
+
+        return n.key;
+    }
+
+    @Override
+    public int size() {
+        return _size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return _size == 0;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return search(head, (int)key) != null;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        Stack<Node> s = new Stack<Node>();
+        Node curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                curNode = curNode.left;
+            } else {
+                curNode = s.pop();
+                if (value.equals(curNode.value)) {
+                    return true;
+                }
+                curNode = curNode.right;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String get(Object key) {
+        Node n = search(head, (int)key);
+        return n == null ? null : n.value;
+    }
+
+    @Override
+    public String put(Integer key, String value) {
+        Node n = search(head, (int)key);
+        if (n == null) {
+            _size++;
+            head = put(head, key, value);
+            if (head.color == COLOR.RED) {
+                head.color = COLOR.BLACK;
+            }
+            return null;
+        }
+
+        String oldValue = n.value;
+        n.value = value;
+        return oldValue;
+    }
+
+
+    private Node findMin(Node n) {
+        while (n.left != null) {
+            n = n.left;
+        }
+
+        return n;
+    }
+
+    private Node removeMin(Node n) {
+        if (n.left == null) {
+            return n.right;
+        }
+
+        n.left = removeMin(n.left);
+        return balanceNode(n);
+    }
+
+
+    private Node remove(Node n, Integer key) {
+        if (key < n.key) {
+            n.left = remove(n.left, key);
+        } else {
+            if (isRed(n.left)) {
+                n = rightRotate(n);
+            }
+            if (n.key.equals(key) && n.right == null) {
+                return null;
+            }
+
+            if (n.key.equals(key)) {
+                Node minNode = findMin(n.right);
+                n.key = minNode.key;
+                n.value = minNode.value;
+                n.right = removeMin(n.right);
+            } else {
+                n.right = remove(n.right, key);
+            }
+        }
+        return balanceNode(n);
+    }
+    @Override
+    public String remove(Object key) {
+        String oldValue = get(key);
+        if (oldValue != null) {
+            _size--;
+            head = remove(head, (int)key);
+            if (head.color == COLOR.RED) {
+                head.color = COLOR.BLACK;
+            }
+        }
+
+        return oldValue;
+    }
+
+    @Override
+    public void putAll(Map<? extends Integer, ? extends String> m) {
+
+    }
+
+    @Override
+    public void clear() {
+        Stack<Node> s = new Stack<Node>();
+        Node lastVisited = null, curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                lastVisited = curNode;
+                curNode = curNode.left;
+            } else {
+                curNode = s.pop();
+                if (lastVisited != null && lastVisited != curNode) {
+                    lastVisited.right = null;
+                }
+                lastVisited = curNode;
+                curNode.left = null;
+                curNode = curNode.right;
+            }
+        }
+        head.left = null;
+        head.right = null;
+        head = null;
+        _size = 0;
+    }
+
+    @Override
+    public Set<Integer> keySet() {
+        return null;
+    }
+
+    @Override
+    public Collection<String> values() {
+        return null;
+    }
+
+    @Override
+    public Set<Entry<Integer, String>> entrySet() {
+        return null;
+    }
+}
+
+
+
+package by.it._310971_gormash.lesson13;
+
+import java.util.*;
+
+public class GraphA {
+    private final Map<String, List<String>> adjList = new HashMap<>();
+    private final Set<String> visited = new HashSet<>();
+    private final List<String> result = new ArrayList<>(); // Изменено на List
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Введите структуру орграфа (например, 0 -> 2, 1 -> 3, 2 -> 3, 0 -> 1): ");
+        String input = scanner.nextLine().trim();
+
+        GraphA graph = new GraphA();
+        graph.buildGraph(input);
+        graph.topologicalSort();
+
+        System.out.println("Топологическая сортировка: " + String.join(" ", graph.result)); // Сначала мы присоединяем все элементы
+    }
+
+    private void buildGraph(String input) {
+        String[] edges = input.split(", ");
+        for (String edge : edges) {
+            String[] parts = edge.split(" -> ");
+            String vertex = parts[0].trim();
+            String neighbor = parts[1].trim();
+
+            adjList.putIfAbsent(vertex, new ArrayList<>());
+            adjList.putIfAbsent(neighbor, new ArrayList<>());
+            adjList.get(vertex).add(neighbor);
+        }
+
+        // Сортируем соседей для лексикографического порядка
+        for (List<String> neighbors : adjList.values()) {
+            Collections.sort(neighbors);
+        }
+    }
+
+    private void topologicalSort() {
+        PriorityQueue<String> minHeap = new PriorityQueue<>(); // Используем PriorityQueue для сортировки
+        for (String vertex : adjList.keySet()) {
+            if (!visited.contains(vertex)) {
+                dfs(vertex, minHeap);
+            }
+        }
+        while (!minHeap.isEmpty()) {
+            result.add(minHeap.poll()); // Извлекаем элементы в порядке возрастания
+        }
+    }
+
+    private void dfs(String vertex, PriorityQueue<String> minHeap) {
+        if (visited.contains(vertex)) {
+            return; // Если уже посещена, выходим
+        }
+
+        visited.add(vertex); // Добавляем в окончательно посещенные
+        for (String neighbor : adjList.getOrDefault(vertex, Collections.emptyList())) {
+            dfs(neighbor, minHeap);
+        }
+        minHeap.add(vertex); // Добавляем после обработки всех соседей
+    }
+}
+
+
+
+package by.it._310971_gormash.lesson13;
+
+import java.util.*;
+
+public class GraphB {
+    private Map<Integer, List<Integer>> adjList;
+
+    public GraphB() {
+        adjList = new HashMap<>();
+    }
+
+    // Метод для добавления ребра в граф
+    public void addEdge(int from, int to) {
+        adjList.putIfAbsent(from, new ArrayList<>());
+        adjList.get(from).add(to);
+    }
+
+    // Метод для проверки наличия циклов в графе
+    public boolean hasCycle() {
+        Set<Integer> visited = new HashSet<>();
+        Set<Integer> recStack = new HashSet<>();
+
+        for (Integer node : adjList.keySet()) {
+            if (hasCycleUtil(node, visited, recStack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Вспомогательный метод для проверки циклов
+    private boolean hasCycleUtil(int node, Set<Integer> visited, Set<Integer> recStack) {
+        if (recStack.contains(node)) {
+            return true; // Цикл найден
+        }
+        if (visited.contains(node)) {
+            return false; // Узел уже обработан
+        }
+        visited.add(node);
+        recStack.add(node);
+
+        for (Integer neighbor : adjList.getOrDefault(node, new ArrayList<>())) {
+            if (hasCycleUtil(neighbor, visited, recStack)) {
+                return true;
+            }
+        }
+        recStack.remove(node);
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        GraphB graph = new GraphB();
+        // Считывание строки орграфа
+        String input = scanner.nextLine();
+        String[] edges = input.split(", ");
+
+        // Добавление ребер в граф
+        for (String edge : edges) {
+            String[] nodes = edge.split(" -> ");
+            int from = Integer.parseInt(nodes[0]);
+            int to = Integer.parseInt(nodes[1]);
+            graph.addEdge(from, to);
+        }
+        // Проверка наличия циклов и вывод результата
+        if (graph.hasCycle()) {
+            System.out.println("yes");
+        } else {
+            System.out.println("no");
+        }
+        scanner.close();
+    }
+}
+
+
+package by.it._310971_gormash.lesson13;
+
+import java.util.*;
+
+public class GraphC {
+    private final Map<String, List<String>> graph = new HashMap<>();
+    private final Map<String, List<String>> reverseGraph = new HashMap<>();
+    private final Set<String> visited = new HashSet<>();
+    private final List<List<String>> components = new ArrayList<>();
+    private final Deque<String> stack = new ArrayDeque<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        GraphC graphC = new GraphC();
+        graphC.buildGraph(input);
+        graphC.findStronglyConnectedComponents();
+        graphC.printComponents();
+    }
+
+    // Метод для построения графа из входной строки
+    private void buildGraph(String input) {
+        String[] edges = input.split(", ");
+        for (String edge : edges) {
+            String[] vertices = edge.split("->");
+            graph.computeIfAbsent(vertices[0], k -> new ArrayList<>()).add(vertices[1]);
+            reverseGraph.computeIfAbsent(vertices[1], k -> new ArrayList<>()).add(vertices[0]);
+            graph.computeIfAbsent(vertices[1], k -> new ArrayList<>()); // Добавляем вершину, если она отсутствует
+        }
+    }
+
+    // Метод для поиска компонент сильной связности
+    private void findStronglyConnectedComponents() {
+        // Первый проход - заполняем стек
+        for (String vertex : graph.keySet()) {
+            if (!visited.contains(vertex)) {
+                dfsFillStack(vertex);
+            }
+        }
+
+        // Второй проход - ищем сильно связанные компоненты
+        visited.clear();
+        while (!stack.isEmpty()) {
+            String vertex = stack.pop();
+            if (!visited.contains(vertex)) {
+                List<String> component = new ArrayList<>();
+                dfsCollectComponent(vertex, component);
+                Collections.sort(component); // Сортируем компоненты по алфавиту
+                components.add(component);
+            }
+        }
+    }
+
+    // Метод обхода в глубину и заполняем стек
+    private void dfsFillStack(String vertex) {
+        visited.add(vertex);
+        for (String neighbor : graph.getOrDefault(vertex, Collections.emptyList())) { // Изменено для обработки отсутствующих соседей
+            if (!visited.contains(neighbor)) {
+                dfsFillStack(neighbor);
+            }
+        }
+        stack.push(vertex);
+    }
+
+    // Метод для сбора компонента
+    private void dfsCollectComponent(String vertex, List<String> component) {
+        visited.add(vertex);
+        component.add(vertex);
+        for (String neighbor : reverseGraph.getOrDefault(vertex, Collections.emptyList())) { // Изменено для обработки отсутствующих соседей
+            if (!visited.contains(neighbor)) {
+                dfsCollectComponent(neighbor, component);
+            }
+        }
+    }
+
+    // Метод для вывода компонент
+    private void printComponents() {
+        for (List<String> component : components) {
+            System.out.println(String.join("", component)); // используем пробел для разделения
+        }
+    }
+}
+
+
+package by.it._310971_gormash.lesson14;
+import java.io.IOException;
+import java.util.*;
+
+public class PointsA {
+    public static void main(String[] args) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        // Ввод расстояния D и числа точек N
+        double D = scanner.nextDouble();
+        int N = scanner.nextInt();
+        scanner.nextLine(); // Переход на новую строку
+
+        // Считывание точек в трехмерном пространстве
+        Point[] points = new Point[N];
+        for (int i = 0; i < N; i++) {
+            String[] coords = scanner.nextLine().split(" ");
+            points[i] = new Point(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]), Double.parseDouble(coords[2]));
+        }
+
+        // Создаем DSU для отслеживания кластеров
+        DSU dsu = new DSU(N);
+
+        // Сопоставляем точки и объединяем их в кластеры при необходимости
+        for (int i = 0; i < N; i++) {
+            for (int j = i + 1; j < N; j++) {
+                double distance = points[i].distance(points[j]);
+                if (distance < D) {
+                    dsu.union(i, j);
+                }
+            }
+        }
+
+        // Подсчет размеров кластеров
+        Map<Integer, Integer> clusterSizes = new HashMap<>();
+        for (int i = 0; i < N; i++) {
+            int root = dsu.find(i);
+            clusterSizes.put(root, clusterSizes.getOrDefault(root, 0) + 1);
+        }
+
+        // Подготовка размеров кластеров для вывода
+        List<Integer> sizes = new ArrayList<>(clusterSizes.values());
+        Collections.sort(sizes, Collections.reverseOrder()); // Сортируем по убыванию
+
+        // Выводим размеры кластеров в порядке убывания
+        for (int size : sizes) {
+            System.out.print(size + " ");
+        }
+    }
+
+    static class Point {
+        double x, y, z;
+
+        Point(double x, double y, double z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        double distance(Point other) {
+            return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) + Math.pow(z - other.z, 2));
+        }
+    }
+
+    static class DSU {
+        private int[] parent;
+        private int[] size;
+
+        public DSU(int n) {
+            parent = new int[n];
+            size = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        public int find(int a) {
+            if (parent[a] != a) {
+                parent[a] = find(parent[a]);
+            }
+            return parent[a];
+        }
+
+        public void union(int a, int b) {
+            int rootA = find(a);
+            int rootB = find(b);
+            if (rootA != rootB) {
+                if (size[rootA] < size[rootB]) {
+                    parent[rootA] = rootB;
+                    size[rootB] += size[rootA];
+                } else {
+                    parent[rootB] = rootA;
+                    size[rootA] += size[rootB];
+                }
+            }
+        }
+    }
+}
+
+
+package by.it._310971_gormash.lesson14;
+
+import java.util.*;
+
+public class SitesB {
+    // Класс для структуры данных DSU
+    static class DSU {
+        private Map<String, String> parent = new HashMap<>();
+        private Map<String, Integer> size = new HashMap<>();
+
+        // Метод для нахождения корня с сокращением пути
+        public String find(String x) {
+            if (!parent.containsKey(x)) {
+                parent.put(x, x);
+                size.put(x, 1);
+            }
+            if (!x.equals(parent.get(x))) {
+                parent.put(x, find(parent.get(x))); // сокращение пути
+            }
+            return parent.get(x);
+        }
+
+        // Метод для объединения двух сайтов
+        public void union(String x, String y) {
+            String rootX = find(x);
+            String rootY = find(y);
+            if (!rootX.equals(rootY)) {
+                // Объединение по размеру
+                if (size.get(rootX) < size.get(rootY)) {
+                    parent.put(rootX, rootY);
+                    size.put(rootY, size.get(rootY) + size.get(rootX));
+                } else {
+                    parent.put(rootY, rootX);
+                    size.put(rootX, size.get(rootX) + size.get(rootY));
+                }
+            }
+        }
+
+        // Метод для получения размеров кластеров
+        public List<Integer> getClusterSizes() {
+            Map<String, Integer> clusterSizeMap = new HashMap<>();
+            for (String site : parent.keySet()) {
+                String root = find(site);
+                clusterSizeMap.put(root, size.get(root));
+            }
+            List<Integer> sizes = new ArrayList<>(clusterSizeMap.values());
+            Collections.sort(sizes, Collections.reverseOrder()); // Сортировка по убыванию
+            return sizes;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DSU dsu = new DSU();
+
+        // Чтение входных данных
+        while (true) {
+            String line = scanner.nextLine();
+            if (line.equals("end")) break; // Завершение ввода
+            String[] sites = line.split("\\+");
+            if (sites.length == 2) { // Убедимся, что введены два сайта
+                dsu.union(sites[0], sites[1]); // Объединение сайтов
+            }
+        }
+
+        // Получение и вывод размеров кластеров
+        List<Integer> clusterSizes = dsu.getClusterSizes();
+        for (int size : clusterSizes) {
+            System.out.print(size + " ");
+        }
+    }
+}
+
+
+package by.it._310971_gormash.lesson14;
+
+import java.util.*;
+
+public class StatesHanoiTowerC {
+    private static class DSU {
+        private final int[] parent;
+        private final int[] size;
+
+        private DSU(int n) {
+            parent = new int[n];
+            size = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        private int find(int v) {
+            if (v != parent[v])
+                parent[v] = find(parent[v]);
+            return parent[v];
+        }
+
+        private void union(int p, int q) {
+            int rootP = find(p);
+            int rootQ = find(q);
+
+            if (rootP == rootQ) {
+                return;
+            }
+
+            if (size[rootP] < size[rootQ]) {
+                parent[rootP] = rootQ;
+                size[rootQ] += size[rootP];
+            } else {
+                parent[rootQ] = rootP;
+                size[rootP] += size[rootQ];
+            }
+        }
+    }
+
+    private static int max(int[] heights) {
+        return Math.max(Math.max(heights[0], heights[1]), heights[2]);
+    }
+
+    private static int[] carryingOver(int N, int step, int k) {
+        int t, axisY, axisZ;
+        if (N % 2 == 0) {
+            axisY = 1;
+            axisZ = 2;
+        } else {
+            axisY = 2;
+            axisZ = 1;
+        }
+
+        int[] result = new int[3];
+        t = (step / (1 << (k - 1)) - 1) / 2;
+        int from = 0, to = 0;
+        if (k % 2 != 0)
+            switch (t % 3) {
+                case 0 -> to = axisY;
+                case 1 -> {
+                    from = axisY;
+                    to = axisZ;
+                }
+                case 2 -> from = axisZ;
+            }
+        else {
+            switch (t % 3) {
+                case 0 -> to = axisZ;
+                case 1 -> {
+                    from = axisZ;
+                    to = axisY;
+                }
+                case 2 -> from = axisY;
+            }
+        }
+
+        result[from] = -1;
+        result[to] = 1;
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+
+        int max_size = (1 << n) - 1;
+        int[] steps_heights = new int[n];
+        Arrays.fill(steps_heights, -1);
+
+        DSU dsu = new DSU(max_size);
+        int[] heights = new int[3];
+
+        heights[0] = n;
+        for (int i = 0; i < max_size; i++) {
+            int step = i + 1;
+            int[] delta;
+            if (step % 2 != 0) {
+                delta = carryingOver(n, step, 1);
+            } else {
+                int count = step;
+                int countDisk = 0;
+
+                while (count % 2 == 0) {
+                    countDisk++;
+                    count /= 2;
+                }
+                delta = carryingOver(n, step, countDisk + 1);
+            }
+            for (int j = 0; j < 3; j++)
+                heights[j] += delta[j];
+
+            int max = max(heights);
+            if (steps_heights[max - 1] == -1)
+                steps_heights[max - 1] = i;
+            else
+                dsu.union(steps_heights[max - 1], i);
+        }
+
+        int[] sizes = new int[n];
+        for (int i = 0; i < n; i++)
+            if (steps_heights[i] != -1)
+                sizes[i] = dsu.size[dsu.find(steps_heights[i])];
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+
+            int max = i;
+            for (int j = i + 1; j < n; j++) {
+                if (sizes[max] < sizes[j]) {
+                    max = j;
+                }
+            }
+
+            if (sizes[max] == 0) {
+                break;
+            }
+
+            int temp = sizes[max];
+            sizes[max] = sizes[i];
+            sizes[i] = temp;
+            sb.insert(0, sizes[i] + " ");
+        }
+
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb);
+    }
+}
+
+
+package by.it._310971_gormash.lesson15;
+
+import by.it.HomeWork;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+@SuppressWarnings("NewClassNamingConvention")
+public class Test_Part2_Lesson15Test extends HomeWork {
+
+    private static List<String> samples;
+
+    @Test(timeout = 5000) //можно изменить под свою производительность
+    public void testSourceScannerA() {
+        HomeWork run = run("");
+        for (String sample : lazyWalk()) {
+            run.include(sample);
+        }
+    }
+
+    @Test(timeout = 5000) //можно изменить под свою производительность
+    public void testSourceScannerB() {
+        HomeWork run = run("");
+        for (String sample : lazyWalk()) {
+            run.include(sample);
+        }
+    }
+
+
+    @Test(timeout = 5000) //можно изменить под свою производительность
+    public void testSourceScannerC() {
+        run("").include("FiboA.java");
+    }
+
+    private static List<String> lazyWalk() {
+        if (samples == null) {
+            samples = new ArrayList<>();
+            Path root = Path.of(System.getProperty("user.dir")
+                                + File.separator + "src" + File.separator);
+            try (var walk = Files.walk(root)) {
+                walk.forEach(
+                        p -> {
+                            if (p.toString().endsWith(".java")) {
+                                try {
+                                    String s = Files.readString(p);
+                                    if (!s.contains("@Test") && !s.contains("org.junit.Test")) {
+                                        samples.add(root.relativize(p).toString());
+                                    }
+                                } catch (IOException e) {
+                                    if (System.currentTimeMillis() < 0) {
+                                        System.err.println(p);
+                                    }
+                                }
+                            }
+                        }
+                );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return samples;
+    }
+
+}
+
+
+package by.it._310971_gormash.lesson15;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.MalformedInputException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class SourceScannerB {
+    public static void main(String[] args) {
+        String src = System.getProperty("user.dir") + File.separator + "src" + File.separator;
+        List<File> javaFiles = new ArrayList<>();
+
+        // Сбор всех файлов .java из каталога src и его подкаталогов
+        gatherJavaFiles(new File(src), javaFiles);
+
+        List<FileSizeInfo> fileSizeInfos = new ArrayList<>();
+
+        for (File file : javaFiles) {
+            try {
+                String cleanedText = processJavaFile(file);
+                if (cleanedText != null) {
+                    int sizeInBytes = cleanedText.getBytes().length;
+                    fileSizeInfos.add(new FileSizeInfo(file.getPath().replace(src, ""), sizeInBytes));
+                }
+            } catch (MalformedInputException e) {
+                System.err.println("Ошибка чтения файла: " + file.getPath() + " - " + e.getMessage());
+            } catch (IOException e) {
+                System.err.println("Ошибка обработки файла: " + file.getPath() + " - " + e.getMessage());
+            }
+        }
+
+        // Сортировка по размеру и лексикографически
+        fileSizeInfos.sort(Comparator.comparingInt(FileSizeInfo::getSize)
+                .thenComparing(FileSizeInfo::getRelativePath));
+
+        // Вывод результата
+        for (FileSizeInfo info : fileSizeInfos) {
+            System.out.println(info.getSize() + " bytes - " + info.getRelativePath());
+        }
+    }
+
+    private static void gatherJavaFiles(File directory, List<File> javaFiles) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    gatherJavaFiles(file, javaFiles);
+                } else if (file.getName().endsWith(".java")) {
+                    javaFiles.add(file);
+                }
+            }
+        }
+    }
+
+    private static String processJavaFile(File file) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+            String line;
+            boolean insideComment = false;
+
+            while ((line = reader.readLine()) != null) {
+                line = removePackageAndImports(line);
+                line = removeComments(line, insideComment);
+
+                if (line.trim().length() > 0) {
+                    sb.append(line).append(System.lineSeparator());
+                }
+            }
+        }
+
+        String result = sb.toString().trim();
+        return result.isEmpty() ? null : result; // Возвращаем null, если пустой результат
+    }
+
+    private static String removePackageAndImports(String line) {
+        if (line.startsWith("package") || line.startsWith("import")) {
+            return ""; // Удаляем строки с package и import
+        }
+        return line;
+    }
+
+    private static String removeComments(String line, boolean insideComment) {
+        if (insideComment) {
+            if (line.contains("*/")) {
+                insideComment = false;
+                return ""; // Удаляем многострочные комментарии
+            }
+            return ""; // Удаляем все строки внутри многострочного комментария
+        }
+
+        if (line.contains("/*")) {
+            insideComment = true;
+            return line.substring(0, line.indexOf("/*")); // Удаляем строку до многострочного комментария
+        }
+
+        if (line.contains("//")) {
+            return line.substring(0, line.indexOf("//")); // Удаляем строку до однострочного комментария
+        }
+
+        return line;
+    }
+
+    private static class FileSizeInfo {
+        private final String relativePath;
+        private final int size;
+
+        public FileSizeInfo(String relativePath, int size) {
+            this.relativePath = relativePath;
+            this.size = size;
+        }
+
+        public String getRelativePath() {
+            return relativePath;
+        }
+
+        public int getSize() {
+            return size;
+        }
+    }
+}
+
+
+package by.it._310971_gormash.lesson15;
+
+import java.io.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.regex.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.LinkOption;
+
+public class SourceScannerC {
+
+
+    // Метод для чтения всех .java файлов из каталогаго подкаталогов
+    public static void main(String[] args) {
+        String src = System.getProperty("user.dir") + File.separator + "src" + File.separator;
+        List<ProcessedFile> processedFiles = new ArrayList<>();
+
+        try {
+            Files.walkFileTree(Paths.get(src), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.toString().endsWith(".java")) {
+                        String content = readFile(file);
+                        if (!isTestFile(content)) {
+                            String processedContent = processFileContent(content);
+                            processedFiles.add(new ProcessedFile(file.toString(), processedContent));
+                        }
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Найти копии по метрике Левенштейна
+        findAndPrintCopies(processedFiles);
+    }
+
+    // Чтение содержимого файла с обработкой MalformedInputException
+    private static String readFile(Path file) {
+        StringBuilder content = new StringBuilder();
+        try {
+            Files.lines(file, StandardCharsets.UTF_8).forEach(line -> content.append(line).append("\n"));
+        } catch (MalformedInputException e) {
+            System.err.println("Неверный формат файла: " + file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
+
+    // Проверка, является ли файл тестом
+    private static boolean isTestFile(String content) {
+        return content.contains("@Test") || content.contains("org.junit.Test");
+    }
+
+    // Обработка содержимого файла
+    private static String processFileContent(String content) {
+        // Удаление строки package
+        content = content.replaceAll("(?i)^\\s*package\\s+.*;?\\s*", "");
+        // Удаление импортов
+        content = content.replaceAll("(?i)^\\s*import\\s+.*;?\\s*", "");
+        // Удаление комментариев
+        content = content.replaceAll("(//.*?$)|(/\\*.*?\\*/)", "");
+        // Замена символов < 33 на пробел
+        content = content.replaceAll("[\\x00-\\x1F]", " ");
+        // Удаляем лишние пробелы и trim
+        return content.trim();
+    }
+
+    // Класс для хранения пути файла и его контента
+    static class ProcessedFile {
+        String path;
+        String content;
+
+        ProcessedFile(String path, String content) {
+            this.path = path;
+            this.content = content;
+        }
+    }
+
+    // Вычисление расстояния Левенштейна между двумя строками
+    public static int levenshtein(String s1, String s2) {
+        int[][] dp = new int[s1.length() + 1][s2.length() + 1];
+        for (int i = 0; i <= s1.length(); i++) {
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0) {
+                    dp[i][j] = j; // удаление
+                } else if (j == 0) {
+                    dp[i][j] = i; // добавление
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j] + 1, Math.min(dp[i][j - 1] + 1,
+                            dp[i - 1][j - 1] + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1)));
+                }
+            }
+        }
+        return dp[s1.length()][s2.length()];
+    }
+
+    // Поиск и вывод копий файлов
+    private static void findAndPrintCopies(List<ProcessedFile> processedFiles) {
+        Map<String, List<String>> copiesMap = new HashMap<>();
+
+        for (int i = 0; i < processedFiles.size(); i++) {
+            for (int j = i + 1; j < processedFiles.size(); j++) {
+                int distance = levenshtein(processedFiles.get(i).content, processedFiles.get(j).content);
+                if (distance < 10) { // найти копии
+                    copiesMap.computeIfAbsent(processedFiles.get(i).path, k -> new ArrayList<>()).add(processedFiles.get(j).path);
+                    copiesMap.computeIfAbsent(processedFiles.get(j).path, k -> new ArrayList<>()).add(processedFiles.get(i).path);
+                }
+            }
+        }
+
+        // Сортируем и выводим результаты
+        copiesMap.forEach((filePath, copies) -> {
+            System.out.println(filePath);
+            Collections.sort(copies);
+            for (String copy : copies) {
+                System.out.println(copy);
+            }
+        });
+    }
+}
